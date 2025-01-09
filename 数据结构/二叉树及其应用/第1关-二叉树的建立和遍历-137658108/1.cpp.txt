@@ -1,0 +1,76 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+//二叉链表的存储结构
+typedef char TElemType;
+typedef struct BiTNode{
+  TElemType data;
+  struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+
+void CreatBiTree(BiTree &T){
+//按照先序次序输入二叉树结点的值，建立二叉链表表示的二叉树T
+/**************begin************/
+    char x = getchar();
+
+    // cout << "dd: " << x << endl;
+
+    if(x == '#')
+    {
+        return ;
+    }
+
+    T = new BiTNode;
+    T->data = x;
+    CreatBiTree(T->lchild);
+    CreatBiTree(T->rchild);
+  
+/**************end************/  
+}
+
+void preorder(BiTree T){
+//先序遍历二叉树T
+/**************begin************/ 
+	cout << "  " << T->data;
+    if(T->lchild != NULL) preorder(T->lchild);
+    if(T->rchild != NULL) preorder(T->rchild);
+/**************end************/
+}
+
+void inorder(BiTree T){
+//中序遍历二叉树T
+/**************begin************/
+    if(T->lchild != NULL) inorder(T->lchild);
+    cout << "  " << T->data;
+    if(T->rchild != NULL) inorder(T->rchild);
+
+
+/**************end************/
+}
+
+void postorder(BiTree T){
+//后序遍历二叉树T
+/**************begin************/
+	if(T->lchild != NULL) postorder(T->lchild);
+    if(T->rchild != NULL) postorder(T->rchild);
+    cout << "  " << T->data;
+	
+/**************end************/
+}
+
+int  main(){
+   	BiTree T; 
+   	CreatBiTree(T);
+   	cout<<"先序序列：";
+	preorder(T);					
+	cout<<"\n中序序列：";
+   	inorder(T);				
+	cout<<"\n后序序列：";
+	postorder(T);	 
+   	return 0;
+}

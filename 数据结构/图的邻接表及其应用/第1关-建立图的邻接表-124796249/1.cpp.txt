@@ -1,0 +1,75 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#define MVNum 20    			//最大顶点数
+typedef  struct ArcNode{		//边结点 
+    int 	adjvex;				//邻接点的位置 
+    struct 	ArcNode *nextarc;	//指向下一条边的指针 
+}ArcNode;
+
+typedef struct VNode{			//表头结点（顶点信息） 
+    char  data;					//顶点值 
+    ArcNode     *firstarc;		//指向第一条依附该顶点的边的指针 
+}VNode; 
+
+typedef struct {
+  	int vexnum;					//图的顶点数
+	int arcnum;					//图的边数 
+	VNode vertices[MVNum];   	//顶点向量表 
+}ALGraph;						//邻接表 
+
+int LocateVex(ALGraph G,char v)  
+{//在顶点向量表中查找顶点v，如果找到，则返回顶点在图中的位置，否则返回-1
+   for (int i=0;i<G.vexnum ;i++)
+        if ( G.vertices[i].data==v ) return i;
+   return -1;
+}
+
+void CreateUDG(ALGraph &G)
+{//建立无向图的邻接表 , 对每一条边（i,j）,按照头插法，分别将表结点插入i表和j表  
+	/******************begin*****************/
+	cin >> G.vexnum >> G.arcnum;
+	for(int i = 0; i < G.vexnum; ++i)
+	{
+		cin >> G.vertices[i].data;
+		G.vertices[i].firstarc = NULL;
+	}
+	for(int i = 0; i < G.arcnum; ++i)
+	{
+		char c, d;
+		cin >> c >> d;
+		int u = LocateVex(G, c);
+		int v = LocateVex(G, d);
+		ArcNode *p;
+		p = new ArcNode;
+		p->adjvex = v;
+		p->nextarc = G.vertices[u].firstarc;
+		G.vertices[u].firstarc = p;
+		p = new ArcNode;
+		p->adjvex = u;
+		p->nextarc = G.vertices[v].firstarc;
+		G.vertices[v].firstarc = p;
+	}
+
+
+   /******************end ******************/
+}
+void PrintGraph(ALGraph G)				//输出图中每个点的邻接点 
+{
+    ArcNode *p;	    
+	for (int i=0;i<G.vexnum;i++)
+	{
+		printf("\n%2c邻接到：",G.vertices[i].data);
+		for (p=G.vertices[i].firstarc; p ;p=p->nextarc)
+		{
+			int j=p->adjvex;
+			printf("%2c",G.vertices[j].data);
+		}		
+	}
+}
+int main()
+{	ALGraph G;
+  	CreateUDG(G);				//建立无向图的邻接表 
+  	PrintGraph(G);				//输出图的邻接表	 
+    return 0;   	
+}

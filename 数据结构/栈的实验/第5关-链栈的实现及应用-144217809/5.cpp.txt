@@ -1,0 +1,83 @@
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+typedef int SElemType;
+typedef struct SNode{
+	SElemType data;
+	struct SNode *next;
+}SNode,*LinkStack;
+
+Status InitStack(LinkStack  &S){
+	//初始化空的链栈S 
+  	S=NULL;
+  	return OK;
+}
+
+bool StackEmpty(LinkStack S){
+	//初始条件：栈S已经存在
+ 	//操作结果：若栈S为空栈，返回true，否则返回false
+ 	/********** Begin **********/ 
+ 	if(S == NULL) return true;
+ 	else return false;
+ 	/********** End ***********/	
+}
+
+Status Push(LinkStack &S,SElemType e){
+	//初始条件：栈S已经存在
+	//操作结果：将元素e入栈，如果入栈成功，返回OK，否则返回ERROR
+	/********** Begin **********/
+ 	LinkStack p = S;
+    S = new SNode;
+    S->next = p;
+    S->data = e;
+
+    return OK;
+ 	/********** End **********/	
+}
+Status Pop(LinkStack &S,SElemType &e){
+	//初始条件：栈S已经存在
+ 	//操作结果：删除栈顶元素，并用e返回其值。若出栈成功，函数返回OK，否则返回ERROR。
+ 	/********** Begin **********/
+ 	
+    if(StackEmpty(S)) return ERROR;
+    e = S->data;
+    S = S->next;
+    return OK;
+	/********** End **********/
+}
+
+int main(){
+	SElemType e;
+	LinkStack S;	//定义链栈S 
+	InitStack(S);	//将链栈S初始化为空栈 
+	//从键盘依次输入整数序列（0表示结束），
+	//若输入的整数不为-1 ，则将其入栈S,否则将栈顶元素出栈，并输出该元素（如出栈失败，输出Pop Error，程序结束)
+  	/********** Begin **********/ 		
+	// int e;
+    while(cin >> e && e != 0)
+    {
+        if(e == -1)
+        {
+            int st = Pop(S, e);
+            if(!st)
+            {
+                cout << "Pop Error" << endl;
+                return 0;
+            }
+            else cout << e << endl;
+        }
+        else
+        {
+            int st = Push(S, e);
+        }
+
+    }
+
+
+
+	/********** End **********/
+	return 0;	
+}

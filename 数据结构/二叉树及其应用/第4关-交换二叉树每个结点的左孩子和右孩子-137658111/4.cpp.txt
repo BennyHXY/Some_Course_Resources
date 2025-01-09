@@ -1,0 +1,59 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+//二叉链表的存储结构
+typedef char TElemType;
+typedef struct BiTNode{
+  TElemType data;
+  struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+
+void CreatBiTree(BiTree &T){
+//按照先序次序输入二叉树结点的值，建立二叉链表表示的二叉树T
+  TElemType ch;  
+  cin>>ch;
+  if (ch=='#') T=NULL;
+  else {
+       T= new BiTNode;
+  	   T->data=ch;
+       CreatBiTree(T->lchild);
+	   CreatBiTree(T->rchild);	
+  }
+}
+
+void preorder(BiTree T){
+//先序遍历二叉树T
+	if (T==NULL) return;
+	else {
+	   cout<<"  "<<T->data;
+	   preorder(T->lchild);
+	   preorder(T->rchild);
+	}
+}
+void ExchangeBT(BiTree &T){
+//交换二叉树T的每个结点的左孩子和右孩子
+/**************begin************/         
+   if(T->lchild) ExchangeBT(T->lchild);
+   if(T->rchild) ExchangeBT(T->rchild);
+
+   BiTree t = T->lchild;
+   T->lchild = T->rchild;
+   T->rchild = t;
+/**************end************/ 
+}
+
+int  main(){
+   	BiTree T; 
+   	CreatBiTree(T);
+   	cout<<"交换前的先序序列：";
+	preorder(T);
+	ExchangeBT(T);//交换二叉树的左右孩子					
+	cout<<"\n交换后的先序序列：";
+   	preorder(T);
+   	return 0;
+}

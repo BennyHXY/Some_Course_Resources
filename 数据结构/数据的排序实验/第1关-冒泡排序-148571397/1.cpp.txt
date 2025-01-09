@@ -1,0 +1,72 @@
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+typedef int KeyType;        //关键字类型为int 
+typedef  struct{
+    KeyType key;
+    //其他域按需定义(略)    
+}ElemType;                    //元素（记录）类型 
+typedef struct{
+    ElemType *r;            //基地址 
+    int length;                //表的长度 
+}SqList;                    //顺序表 
+void InitList(SqList &L){    //初始化顺序表 
+    int n;
+    cin>>n;      
+    L.r=new ElemType[n+1]; 
+    for (int i=1;i<=n;i++)
+        cin>>L.r[i].key;        
+    L.length=n;   
+}
+void OutputList(SqList L){    //输出数据表   
+    cout<<endl<<L.r[1].key;
+    for (int i=2;i<=L.length;i++){
+        cout<<" "<<L.r[i].key;    
+    }       
+}
+void BubbleSort(SqList &L){
+    //采用冒泡排序法，将顺序表L的记录（元素）按照关键字递增排列 
+    //要求输出排序过程中每一趟的排序结果 
+    //在这里补充代码，完成本关任务
+    /********** Begin *********/
+    for (int i = 1; i < L.length; i++) {
+        // 标记本趟排序是否发生了交换
+        bool swapped = false;
+
+        // 进行一趟冒泡排序
+        for (int j = 1; j <= L.length - i; j++) {
+            if (L.r[j].key > L.r[j + 1].key) {
+                // 交换两个元素
+                ElemType temp = L.r[j];
+                L.r[j] = L.r[j + 1];
+                L.r[j + 1] = temp;
+
+                swapped = true;
+            }
+        }
+
+        // 输出本趟排序结果
+        OutputList(L);
+
+        // 如果本趟排序没有发生交换，说明序列已经有序，直接退出循环
+        if (!swapped) {
+            break;
+        }
+    }
+    
+    
+    /********** End **********/
+}    
+
+void DestroyList(SqList &L){//销毁顺序表 
+    delete []L.r;
+    L.r=NULL;
+    L.length=0;    
+}
+int main(){
+    SqList L;
+    InitList(L);        //输入一组记录的关键字，存放到顺序表L中
+    BubbleSort(L);        //冒泡排序 
+    DestroyList(L);        //销毁顺序表    
+    return 0; 
+}

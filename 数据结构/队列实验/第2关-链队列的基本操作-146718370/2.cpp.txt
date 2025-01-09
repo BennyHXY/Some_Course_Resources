@@ -1,0 +1,103 @@
+#include <iostream> 
+using namespace std;
+
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+typedef int QElemType;
+
+// 定义链队列节点
+typedef struct QNode {	
+    QElemType data;  	
+    struct QNode* next;
+} QNode, *QueuePtr;
+
+// 定义链队列
+typedef struct {
+    QueuePtr front;	
+    QueuePtr rear;
+} LinkQueue;
+
+// 初始化链队列
+Status InitQueue(LinkQueue &Q) {
+    Q.front = Q.rear = new QNode; // 创建头结点
+    if (!Q.front) exit(OVERFLOW);
+    Q.front->next = NULL; // 初始化为空
+    return OK;
+}
+
+// 判断队列是否为空
+Status QueueEmpty(LinkQueue Q) {
+    return (Q.front->next == NULL); // 若头结点的next为NULL，则队列为空
+}
+
+// 求队列长度
+int QueueLength(LinkQueue Q) {
+    int length = 0;
+    QueuePtr current = Q.front->next; // 从头结点的下一个开始
+    while (current) {
+        length++;
+        current = current->next; // 遍历链表
+    }
+    return length;
+}
+
+// 获取队首元素
+Status GetHead(LinkQueue Q, QElemType &e) {
+    if (QueueEmpty(Q)) return ERROR; // 队列为空
+    e = Q.front->next->data; // 取出队首元素
+    return OK;
+}
+
+// 入队操作
+Status EnQueue(LinkQueue &Q, QElemType e) {
+    QueuePtr newNode = new QNode; // 创建新节点
+    if (!newNode) return OVERFLOW; // 内存分配失败
+    newNode->data = e; // 设置节点数据
+    newNode->next = NULL; // 新节点的next为NULL
+
+    Q.rear->next = newNode; // 将新节点链接到队尾
+    Q.rear = newNode; // 更新队尾指针
+    return OK;
+}
+
+// 出队操作
+Status DeQueue(LinkQueue &Q, QElemType &e) {
+    if (QueueEmpty(Q)) return ERROR; // 队列为空
+    QueuePtr temp = Q.front->next; // 取出队首节点
+    e = temp->data; // 返回队首元素
+    Q.front->next = temp->next; // 更新头结点的next指针
+    if (Q.rear == temp) { // 如果出队后队列为空，更新队尾指针
+        Q.rear = Q.front;
+    }
+    delete temp; // 释放出队节点的内存
+    return OK;
+}
+
+int main() {
+    LinkQueue Q;
+    InitQueue(Q);
+    QElemType x, e, d;
+    cin >> x;
+    while (x) {
+        if (x != -1) {
+            EnQueue(Q, x);
+            cout << endl << x << " 入队!";
+        } else {
+            if (!QueueEmpty(Q)) {
+                GetHead(Q, e);
+                cout << "\n队首元素：" << e;
+                cout << "\n队列长度：" << QueueLength(Q);    
+                DeQueue(Q, d);
+                cout << "\n出队元素：" << d;
+                cout << "\n队列长度：" << QueueLength(Q); 		   			
+            } else {
+                cout << "\n队空";		   		
+            }
+        }
+        cin >> x;
+    }
+    if (!QueueEmpty(Q)) cout << "\n非空队列！";
+    return 0;
+}

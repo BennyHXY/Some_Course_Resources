@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+void hanoi(int n,char x,char y,char z){
+ 	//若塔座x上的n个圆盘，按照规则移动到塔座z上，塔座y作为辅助塔座 
+ 	/********** Begin **********/ 
+    if(n == 0)
+    {
+        return ;
+    }
+     hanoi(n - 1, x , z, y);
+     cout << x << ' ' << n << ' ' << z << endl;
+     hanoi(n - 1, y, x, z);
+	/********** End ***********/	
+}
+
+int main(){
+  	int n;
+  	cin>>n;
+   	hanoi(n, 'X', 'Y', 'Z');
+	return 0;
+ }

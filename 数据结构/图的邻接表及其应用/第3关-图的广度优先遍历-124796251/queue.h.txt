@@ -1,0 +1,34 @@
+#define MAXQSIZE 100
+typedef  int QElemType ;
+typedef struct{
+     QElemType *base;
+     int front;
+     int rear;
+}SqQueue;
+Status InitQueue(SqQueue  &Q){
+    //构造一个空队列
+    Q.base=new QElemType[MAXQSIZE];
+    if (!Q.base) return OVERFLOW;
+    Q.front=Q.rear=0;
+    return OK;
+}
+
+Status EnQueue(SqQueue  &Q,QElemType e){
+    //将元素e入队列
+   if ((Q.rear+1)%MAXQSIZE==Q.front) return ERROR;
+   Q.base[Q.rear]=e;
+   Q.rear=(Q.rear+1)%MAXQSIZE;
+   return OK;
+}
+
+Status DeQueue(SqQueue &Q,QElemType &e){
+    //将元素e出队列
+   if (Q.rear==Q.front) return ERROR;
+   e=Q.base[Q.front];
+   Q.front=(Q.front+1)%MAXQSIZE;
+   return OK;
+}
+
+bool QueueEmpty(SqQueue Q){
+   return (Q.rear==Q.front);
+}

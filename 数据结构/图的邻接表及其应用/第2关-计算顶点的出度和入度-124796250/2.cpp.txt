@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#include "graph.h"				//图的邻接表定义、有向图邻接表的建立和输出 
+void FindOutdegree(ALGraph G,int outdegree[])
+{ 	//计算每个顶点的出度，存入数组outdegree 
+	/******************begin*****************/
+   for(int u = 0; u < G.vexnum; ++u)
+   {
+	   outdegree[u] = 0;
+	   
+	   ArcNode *p = G.vertices[u].firstarc;
+	   while(p!=NULL)
+	   {
+		   ++outdegree[u];
+		   p = p->nextarc;
+	   }
+
+   }
+
+	/******************end *****************/   
+}
+void FindIndegree(ALGraph G,int indegree[])
+{	//计算每个顶点的入度，存入数组indegree
+   /******************begin*****************/
+	for(int u = 0; u < G.vexnum; ++u)
+		indegree[u] = 0;
+
+   for(int u = 0; u < G.vexnum; ++u)
+   {
+	   ArcNode *p = G.vertices[u].firstarc;
+	   while(p!=NULL)
+	   {
+		   int v = p -> adjvex;
+		   ++indegree[v];
+		   p = p->nextarc;
+	   }
+
+   }
+   
+   /******************end *****************/
+}
+
+int main()
+{	ALGraph G;
+	int indegree[MVNum],outdegree[MVNum]; 
+  	CreateDG(G);				//建立有向图的邻接表 
+  	PrintGraph(G);				//输出图的邻接表
+  	FindOutdegree(G,outdegree);	//计算每个顶点的出度 
+  	cout<<"\n 顶点的出度：";
+	for (int i=0;i<G.vexnum;i++) 
+  		printf("%2d",outdegree[i]);
+  	FindIndegree(G,indegree);	//计算每个顶点的入度 
+	cout<<"\n 顶点的入度：";	
+  	for (int i=0;i<G.vexnum;i++) 
+  		printf("%2d",indegree[i]) ;		
+	return 0;   	
+}

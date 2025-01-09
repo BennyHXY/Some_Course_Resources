@@ -1,0 +1,67 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+//二叉链表的存储结构
+typedef char TElemType;
+typedef struct BiTNode{
+  TElemType data;
+  struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+
+void CreatBiTree(BiTree &T){
+//按照先序次序输入二叉树结点的值，建立二叉链表表示的二叉树T
+  TElemType ch;  
+  cin>>ch;
+  if (ch=='#') T=NULL;
+  else {
+       T= new BiTNode;
+  	   T->data=ch;
+       CreatBiTree(T->lchild);
+	   CreatBiTree(T->rchild);
+	
+  } 
+}
+
+void preorder(BiTree T){
+//先序遍历二叉树T
+	if (T==NULL) return;
+	else {
+	   cout<<"  "<<T->data;
+	   preorder(T->lchild);
+	   preorder(T->rchild);
+	}
+}
+bool EqualBT( BiTree T1,BiTree T2) {
+//判断二叉树T1和T2是否相等，返回true或false
+/**************begin************/ 
+    // cout << "dd: " << T1->data << ' ' << T2->data << endl;
+	if(!T1)
+	{
+		if(!T2) return true;
+		else return false;
+	}
+	if(!T2) return false;
+
+	
+	if(T1->data != T2->data) return false;
+	if(!EqualBT(T1->lchild, T2->lchild)) return false;
+	if(!EqualBT(T1->rchild, T2->rchild)) return false;
+	return true;
+/**************end************/ 
+}
+int  main(){
+   	BiTree T1,T2; 
+   	CreatBiTree(T1);
+   	CreatBiTree(T2);
+	//调用函数，判断T1和T2是否相等，输出判定结果
+	/**************begin************/
+   	if(EqualBT(T1, T2)) cout << "YES";
+	else cout << "NO";
+	/**************end************/   
+   	return 0;
+}

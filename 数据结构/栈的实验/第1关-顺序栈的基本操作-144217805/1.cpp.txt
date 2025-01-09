@@ -1,0 +1,83 @@
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXSIZE 5
+typedef  int  SElemType;
+typedef struct{
+    	SElemType *base;
+    	SElemType *top;
+    	int stacksize;
+}SqStack;
+Status InitStack(SqStack  &S){
+//构造一个空栈
+ 	S.base=new SElemType[MAXSIZE];
+	if (!S.base) exit(OVERFLOW) ;
+  	S.top=S.base;
+ 	S.stacksize=MAXSIZE;
+  	return OK;
+}
+
+bool StackEmpty(SqStack S){
+	//初始条件：栈S已经存在
+	//操作结果：若栈S为空栈，返回true，否则返回false
+ 	/********** Begin **********/
+    if(S.top == S.base) return true;
+    else return false;
+	/********** End **********/
+
+}
+
+Status Push(SqStack &S,SElemType e){
+	//初始条件：栈S已经存在
+	//操作结果：将元素e入栈，如果入栈成功，返回OK，否则返回ERROR
+ 	/********** Begin **********/
+    if(S.top - S.base == S.stacksize) return ERROR;
+    ++S.top;
+    *S.top = e;
+    return OK;
+	/********** End **********/
+	
+}
+
+Status Pop(SqStack &S,SElemType &e){
+	//初始条件：栈S已经存在
+	//操作结果：删除栈顶元素，并用e返回其值。若出栈成功，函数返回OK，否则返回ERROR。
+ 	/********** Begin **********/
+    if(S.top == S.base) return ERROR;
+    e = *S.top;
+    --S.top;
+    return OK;
+	/********** End **********/	
+}
+
+int main(){
+	SElemType e;
+	SqStack S;
+	InitStack(S);
+    //从键盘输入整数序列，0表示结束，显示元素是否入栈。然后依次输出栈顶到栈底的元素序列。
+	/********** Begin **********/
+    
+    cin >> e;
+    while(e != 0)
+    {
+        int st = Push(S, e);
+        cout << e ;
+        if(st == OK) cout << " 入栈！" << endl;
+        else cout << " 未入栈！" << endl;
+        cin >> e;
+    }
+
+    cout << "出栈序列：" << endl;
+    while(!StackEmpty(S))
+    {
+        int st = Pop(S, e);
+        cout << e << endl;
+    }
+
+
+	/********** End **********/    
+	return 0;	
+}

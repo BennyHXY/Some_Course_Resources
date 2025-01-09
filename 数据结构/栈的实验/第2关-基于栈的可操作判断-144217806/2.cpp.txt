@@ -1,0 +1,73 @@
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXSIZE 100
+typedef  int  SElemType;
+typedef struct{
+    	SElemType *base;
+    	SElemType *top;
+    	int stacksize;
+}SqStack;
+Status InitStack(SqStack  &S){
+ 	S.base=new SElemType[MAXSIZE];
+	if (!S.base) exit(OVERFLOW) ;
+  	S.top=S.base;
+ 	S.stacksize=MAXSIZE;
+  	return OK;
+}
+
+bool StackEmpty(SqStack S){
+	return (S.base==S.top);
+}
+
+Status Push(SqStack &S,SElemType e){
+ 	if (S.top-S.base==S.stacksize) return ERROR;
+	*S.top++=e;
+	return OK;
+}
+
+Status Pop(SqStack &S,SElemType &e){
+	if (S.base==S.top) return ERROR;
+	e=*--S.top;
+	return OK;
+}
+bool Judge(char str[])//栈的可操作判断
+{//利用栈实现对字符串Str[]所给的栈的操作序列判定是否合法，返回判定结果
+/********** Begin **********/ 
+	SqStack S;
+    int w = InitStack(S);
+    if(!w) return false;
+    for(int i = 0; str[i] != '\0'; ++i)
+    {
+        char x = str[i];
+        int e = 1;
+        if(x == 'I')
+        {
+            int st = Push(S, e);
+            if(!st) return false;
+        }
+        else
+        {
+            if( StackEmpty(S)) return false;
+            int st = Pop(S, e);
+            if(!st) return false;
+        }
+
+    }
+    return true;
+/********** End ***********/ 
+    
+}
+int main()
+{
+    char str[MAXSIZE];
+    cin>>str; 
+    if(Judge(str)) 
+		cout<<"True";
+    else 
+		cout<<"False";    
+    return 0;
+}

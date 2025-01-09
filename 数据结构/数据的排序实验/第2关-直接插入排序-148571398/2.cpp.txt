@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+typedef int KeyType;        //关键字类型为int 
+typedef struct {
+    KeyType key;
+    //其他域按需定义(略)    
+} ElemType;                //记录类型 
+typedef struct {
+    ElemType *r;            //基地址 
+    int length;             //表的长度 
+} SqList;                    //顺序表 
+
+void InitList(SqList &L) {    //初始化顺序表 
+    int n;
+    cin >> n;
+    L.r = new ElemType[n + 1];
+    for (int i = 1; i <= n; i++)
+        cin >> L.r[i].key;
+    L.length = n;
+}
+
+void OutputList(SqList L) {    //输出数据表   
+    cout << endl << L.r[1].key;
+    for (int i = 2; i <= L.length; i++) {
+        cout << " " << L.r[i].key;
+    }
+}
+
+void InsertSort(SqList &L) {
+    // 采用直接插入排序法，将顺序表L的元素按照关键字递增排列
+    // 要求输出排序过程中每一趟的排序结果
+
+    for (int i = 2; i <= L.length; i++) {
+        ElemType temp = L.r[i];
+        int j = i - 1;
+
+        // 寻找插入位置
+        while (j >= 1 && L.r[j].key > temp.key) {
+            L.r[j + 1].key = L.r[j].key;
+            j--;
+        }
+
+        // 插入元素
+        L.r[j + 1].key = temp.key;
+
+        // 输出本趟排序结果
+        OutputList(L);
+    }
+}
+
+void DestroyList(SqList &L) {    //销毁顺序表 
+    delete[] L.r;
+    L.r = NULL;
+    L.length = 0;
+}
+
+int main() {
+    SqList L;
+    InitList(L);        //输入一组记录的关键字，存放到顺序表L中
+    InsertSort(L);        //直接插入排序 
+    DestroyList(L);        //销毁顺序表    
+    return 0;
+}

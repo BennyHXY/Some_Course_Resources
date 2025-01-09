@@ -1,0 +1,119 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <cstring>
+#include <iostream> 
+using namespace std;
+#define MAXSIZE 100
+//哈夫曼树的存储表示 
+typedef struct{	
+	int weight;               	//结点的权值
+	int parent,lchild,rchild; 	//结点的双亲、左孩子、右孩子的下标
+}HTNode,*HuffmanTree;       	
+//哈夫曼编码表的存储表示
+typedef char **HuffmanCode;   	//定义编码表类型
+
+void Select(HuffmanTree HT,int k,int &s1,int &s2)
+{// 在HT[1]…HT[k]中选择两个其双亲域为0且权值最小的结点，并返回它们在HT中的序号s1和s2
+/**************begin************/
+	for(int i = 1; i <= k; ++i)
+	{
+		if(HT[i].parent) continue;
+		if(HT[i].weight < HT[s1].weight)
+		{
+			s2 = s1;
+			s1 = i;
+			continue;
+		}
+		if(HT[i].weight < HT[s2].weight)
+		{
+			s2 = i;
+			continue;
+		}
+
+	}
+	
+/**************end*************/
+}
+void CreateHuffmanTree(HuffmanTree &HT,int n)
+{//构造哈夫曼树HT
+/**************begin************/
+	HT = new HTNode[MAXSIZE * 2];
+	HT[0].weight = 1e9;
+	for(int i = 1; i <= n; ++i)
+	{
+		cin >> HT[i].weight;
+		HT[i].parent = HT[i].lchild = HT[i].rchild = 0;
+	}
+
+	for(int i = n + 1; i <= 2 * n - 1; ++i)
+	{
+		Select(HT, i - 1, HT[i].lchild, HT[i].rchild);
+		HT[HT[i].lchild].parent = i;
+		HT[HT[i].rchild].parent = i;
+		HT[i].parent = 0;
+		HT[i].weight = HT[HT[i].lchild].weight + HT[HT[i].rchild].weight;
+		// cout << "dd:" << i << ' ' <<  HT[i].lchild << ' ' <<  HT[i].rchild << endl;
+	}
+
+
+/**************end*************/
+}
+void CreateHuffmanCode(HuffmanTree HT,HuffmanCode &HC,int n)
+{//从叶子到根逆向求每个字符的哈夫曼编码，存储在编码表HC中
+/**************begin************/
+	HC = new char*[MAXSIZE];
+	
+	for(int i = 1; i <= n; ++i)
+	{
+		int rt = i;
+		int len = 0;
+		char *s = new char[MAXSIZE];
+		while(HT[rt].parent)
+		{
+			// cout << "rt = " << rt << ", fa= " << HT[rt].parent << endl;
+			if(rt == HT[HT[rt].parent].lchild) s[++len] = '0';
+			else s[++len] = '1';
+			rt = HT[rt].parent;
+		}
+		// cout << "hh " << i << ' '  << endl; 
+
+		
+
+		for(int j = 1; j <= len/2; ++j)
+		{
+			int t = s[j];
+			s[j] = s[len + 1 - j];
+			s[len + 1 - j] = t;
+		}
+
+
+		HC[i] = s;
+
+	}
+
+/**************end*************/
+}
+int main()
+{
+	HuffmanTree HT;
+	int i,n;
+	cin>>n;						//输入待编码的字符个数				
+	CreateHuffmanTree(HT,n);    //构造哈夫曼树HT
+	HuffmanCode HC;					
+	CreateHuffmanCode(HT,HC,n);	//构造哈夫曼编码表HC 
+	int WPL=0;
+    //输出每个字符的哈夫曼编码，计算WPL并输出 
+    /**************begin************/
+	
+	for(int i = 1; i <= n; ++i)
+	{
+		int dep = strlen(HC[i] + 1);
+		for(int j = 1; j <= dep; ++j) cout << HC[i][j];
+		cout << endl;
+		WPL += dep * HT[i].weight;
+	}
+	cout << "WPL=" << WPL;
+    /**************end**************/
+	  				
+	return 0;
+}

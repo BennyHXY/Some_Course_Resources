@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#define  OK 1
+#define  ERROR 0 
+#define  OVERFLOW -1
+typedef int Status;
+
+#include "queue.h"              //循环队列的定义以及基本算法（初始化、入队、出队、判队空）
+#include "graph.h"				//图的邻接表定义、无向图邻接表的建立和输出 
+bool visited[MVNum];			//定义访问标记数组 
+void BFS(ALGraph G,int v)
+{	//从顶点v出发，对图进行广度优先遍历
+	SqQueue Q;					//定义队列Q
+    InitQueue(Q);				//将队列Q初始化为空队列
+ 	/******************begin*****************/
+	 EnQueue(Q,v);
+	 while(!QueueEmpty(Q))
+	 {
+		int u;
+		DeQueue(Q, u);
+		
+		if(!visited[u]) printf(" %c", G.vertices[u].data);
+		visited[u] = 1;
+		for(ArcNode* i = G.vertices[u].firstarc;i != NULL; i = i->nextarc)
+		{
+			int adv = i -> adjvex;
+			if(!visited[adv]) EnQueue(Q, adv);
+
+		}
+
+	 }
+   
+ 	/******************end******************/
+}//BFS
+
+void BFSTraverse(ALGraph G){
+   int v;
+   for (v=0;v<G.vexnum;v++) 	//初始化每个顶点的访问标记为false
+   		visited[v]=false;  
+   for (v=0;v<G.vexnum;v++)
+   {      
+        if (!visited[v]) 		
+		{ 
+		   	cout<<endl;
+        	BFS(G,v);			//对未访问的顶点v，调用BFS，进行广度优先搜索
+		}
+   }
+	   
+}//BFSTraverse
+
+int main()
+{	ALGraph G;	
+  	CreateUDG(G);				//建立无向图的邻接表
+	PrintGraph(G);				//输出图的邻接表
+	cout<<"\n 图的广度优先序列：";	 
+    BFSTraverse(G);				//广度优先遍历	
+	return 0;   	
+}

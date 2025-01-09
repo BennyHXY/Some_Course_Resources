@@ -1,0 +1,84 @@
+#include <iostream> 
+using namespace std;
+
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXQSIZE 5
+typedef int QElemType;
+
+typedef struct {
+    QElemType *base;
+    int front;
+    int rear;
+} SqQueue;
+
+Status InitQueue(SqQueue &Q) {
+    // 构造一个空队列
+    Q.base = new QElemType[MAXQSIZE];
+    if (!Q.base) exit(OVERFLOW);
+    Q.front = Q.rear = 0;
+    return OK;
+}
+
+Status QueueEmpty(SqQueue Q) {
+    // 判断队列是否为空
+    return (Q.front == Q.rear);
+}
+
+int QueueLength(SqQueue Q) {
+    // 求队列中元素的个数
+    return (Q.rear - Q.front + MAXQSIZE) % MAXQSIZE;
+}
+
+Status GetHead(SqQueue Q, QElemType &e) {
+    // 取出队首元素
+    if (QueueEmpty(Q)) return ERROR; // 队列为空
+    e = Q.base[Q.front]; // 返回队首元素
+    return OK;
+}
+
+Status EnQueue(SqQueue &Q, QElemType e) {
+    // 入队操作
+    if ((Q.rear + 1) % MAXQSIZE == Q.front) return ERROR; // 队列满
+    Q.base[Q.rear] = e; // 将元素入队
+    Q.rear = (Q.rear + 1) % MAXQSIZE; // 更新队尾指针
+    return OK;
+}
+
+Status DeQueue(SqQueue &Q, QElemType &e) {
+    // 出队操作
+    if (QueueEmpty(Q)) return ERROR; // 队列为空
+    e = Q.base[Q.front]; // 返回队首元素
+    Q.front = (Q.front + 1) % MAXQSIZE; // 更新队首指针
+    return OK;
+}
+
+int main() {
+    SqQueue Q;
+    InitQueue(Q);
+    QElemType x, e, d;
+    int i; 
+    cin >> x;
+    while (x != 0) {
+        if (EnQueue(Q, x) == OK)
+            cout << x << " 入队!\n";
+        else 
+            cout << x << " 入队失败，队满！\n";
+        cin >> x;
+    }
+    cout << "队列长度  取队首  出队列"; 
+    for (i = 0; i < 3; i++) {
+        cout << "\n   " << QueueLength(Q);
+        if (QueueEmpty(Q)) break;
+        GetHead(Q, e); cout << "       " << e; 
+        DeQueue(Q, d); cout << "       " << d;
+    } 
+    i = QueueLength(Q);
+    if (i)
+        cout << "\n当前队列长度为" << i << ",队列非空！";
+    else 
+        cout << "\n当前队列为空队列！";	  	
+    return 0;	
+}

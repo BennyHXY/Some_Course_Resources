@@ -1,0 +1,54 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+//二叉链表的存储结构
+typedef char TElemType;
+typedef struct BiTNode{
+  TElemType data;
+  struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+#include "queue.h"	//循环队列的定义和基本算法 
+void CreatBiTree(BiTree &T){
+//按照先序次序输入二叉树结点的值，建立二叉链表表示的二叉树T
+  TElemType ch;  
+  cin>>ch;
+  if (ch=='#') T=NULL;
+  else {
+       T= new BiTNode;
+  	   T->data=ch;
+       CreatBiTree(T->lchild);
+	   CreatBiTree(T->rchild);
+	
+  }
+}
+
+void LevelOrder(BiTree T){//层序遍历二叉树T
+	SqQueue Q;		//定义队列Q 
+	InitQueue(Q);	//建立空队列Q 
+/**************begin************/
+	EnQueue(Q, T);
+  while(!QueueEmpty(Q))
+  {
+    BiTree u;
+    int st =  DeQueue(Q,u);
+    cout << "  " << u -> data;
+    if(u -> lchild) EnQueue(Q, u -> lchild);
+    if(u -> rchild) EnQueue(Q, u -> rchild);
+
+  }
+
+    
+/**************end************/
+}
+int  main(){
+   	BiTree T; 
+   	CreatBiTree(T);
+   	cout<<"层序序列：";
+	LevelOrder(T);
+   	return 0;
+}

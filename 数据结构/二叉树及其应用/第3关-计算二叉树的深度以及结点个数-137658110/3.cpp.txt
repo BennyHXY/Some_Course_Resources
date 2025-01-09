@@ -1,0 +1,108 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+//二叉链表的存储结构
+typedef char TElemType;
+typedef struct BiTNode{
+  TElemType data;
+  struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+
+void CreatBiTree(BiTree &T){
+//按照先序次序输入二叉树结点的值，建立二叉链表表示的二叉树T
+/**************begin************/
+  TElemType ch;  
+  cin>>ch;
+  // cout << "cc " << ch << endl;
+  if (ch=='#') T=NULL;
+  else {
+       T= new BiTNode;
+  	   T->data=ch;
+       CreatBiTree(T->lchild);
+	   CreatBiTree(T->rchild);
+	
+  }
+/**************end************/  
+}
+int  Depth(BiTree T) {
+//计算二叉树T的深度 
+/**************begin************/ 
+  if(T == NULL) return 0;
+  int ret = 1;
+  
+  int ld = Depth(T -> lchild);
+  int rd = Depth(T -> rchild);
+  if(ld > rd) ret = ld + 1;
+  else ret = rd + 1;
+
+  // cout << "dd: " << T->data << ' ' << ret <<endl;
+  return ret;
+/**************end************/
+}
+
+int  CountNode(BiTree T) {
+//统计二叉树T的结点数 
+/**************begin************/ 
+	 if(T == NULL) return 0;
+   return 1 + CountNode(T->lchild) + CountNode(T->rchild);
+/**************end************/
+}
+
+int CountLeaf(BiTree T) {
+//统计二叉树T的叶结点数 
+/**************begin************/
+	if(T == NULL) return 0;
+  if(T->lchild == NULL && T->rchild == NULL) return 1;
+  return CountLeaf(T->lchild) + CountLeaf(T->rchild);
+/**************end************/
+}
+
+int CountSingle(BiTree T) {
+//统计二叉树T的单分支结点数 
+/**************begin************/
+	if(T == NULL) return 0;
+  int branch = 0;
+  if(T->lchild) ++branch;
+  if(T->rchild) ++branch;
+
+  int ret = 0;
+  if(branch == 1) ++ret;
+
+  return ret + CountSingle(T->lchild) + CountSingle(T->rchild);
+
+/**************end************/	
+}	
+int CountDouble(BiTree T) {
+//统计二叉树T的双分支结点数 
+/**************begin************/
+    if(T == NULL) return 0;
+    int branch = 0;
+    if(T->lchild) ++branch;
+    if(T->rchild) ++branch;
+
+    int ret = 0;
+    if(branch == 2) ++ret;
+
+    return ret + CountDouble(T->lchild) + CountDouble(T->rchild);
+
+
+/**************end************/
+}		
+
+int  main(){
+    BiTree T; 
+   	CreatBiTree(T);
+    //  cout << "ddp: " << Depth(T) << endl;
+    
+   	printf("深度：%10d",Depth(T));
+   	printf("\n结点数：%8d",CountNode(T));
+	  printf("\n叶结点数：%6d",CountLeaf(T));
+	  printf("\n单分支结点数：%2d",CountSingle(T));
+	  printf("\n双分支结点数：%2d",CountDouble(T));	
+   	return 0;
+}

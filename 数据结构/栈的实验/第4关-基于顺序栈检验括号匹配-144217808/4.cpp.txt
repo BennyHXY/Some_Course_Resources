@@ -1,0 +1,70 @@
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXSIZE 100
+typedef  int  SElemType;
+typedef struct{
+    	SElemType *base;
+    	SElemType *top;
+    	int stacksize;
+}SqStack;
+Status InitStack(SqStack  &S){
+ 	S.base=new SElemType[MAXSIZE];
+	if (!S.base) exit(OVERFLOW) ;
+  	S.top=S.base;
+ 	S.stacksize=MAXSIZE;
+  	return OK;
+}
+
+bool StackEmpty(SqStack S){
+	return (S.base==S.top);
+}
+
+Status Push(SqStack &S,SElemType e){
+ 	if (S.top-S.base==S.stacksize) return ERROR;
+	*S.top++=e;
+	return OK;
+}
+
+Status Pop(SqStack &S,SElemType &e){
+	if (S.base==S.top) return ERROR;
+	e=*--S.top;
+	return OK;
+}
+bool Matching(char str[]){
+	//利用顺序栈的基本操作，检验字符串str中的{}()[]是否匹配
+	/********** Begin **********/
+   SqStack S;
+   int w = InitStack(S);
+   for(int i = 0; str[i] != '\0'; ++i)
+   {
+       char ch = str[i];
+       int e;
+       if(ch == '(' || ch == '[' || ch == '{') Push(S, ch);
+        else
+        {
+            int st = Pop(S, e);
+            if(!st) return false;
+            if(e == '(' && ch == ')') continue;
+            if(e == '[' && ch == ']') continue;
+            if(e == '{' && ch == '}') continue;
+            return false;
+        }
+
+
+   }
+   return true;
+   
+	/********** End **********/
+	
+}
+int main(){
+	char str[MAXSIZE];
+	cin>>str;
+	if (Matching(str))
+		 cout<<"匹配成功";
+	else cout<<"匹配失败";		
+}

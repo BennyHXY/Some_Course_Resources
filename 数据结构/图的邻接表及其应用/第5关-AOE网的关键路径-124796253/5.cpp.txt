@@ -1,0 +1,142 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+#define MVNum 100  // 最大顶点数，可根据实际情况调整
+typedef int Status;
+#include "stack.h"  // 顺序栈的定义以及栈的基本函数（初始化、入栈、出栈、判栈空）
+#include "graph.h"  // 图的邻接表定义、图的建立和输出函数
+
+int topo[MVNum], ve[MVNum], vl[MVNum];  // 定义拓扑序列、事件最早发生时间和最晚发生时间
+
+// 计算图中每个顶点的入度，存入indegree数组
+void FindIndegree(ALGraph G, int indegree[])
+{
+    // 初始化所有顶点入度为0
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        indegree[i] = 0;
+    }
+    ArcNode *p;
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        p = G.vertices[i].firstarc;
+        while (p)
+        {
+            indegree[p->adjvex]++;
+            p = p->nextarc;
+        }
+    }
+}
+
+// 利用栈保存0入度顶点，对图进行拓扑排序。如图中有环，函数返回ERROR，否则用topo数组存储拓扑序列，函数返回OK
+Status ToplogicalSort(ALGraph G, int topo[])
+{
+    SqStack S;         // 定义顺序栈S
+    InitStack(S);      // 初始化空栈
+    int indegree[MVNum];
+    FindIndegree(G, indegree);
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        if (indegree[i] == 0)
+            Push(S, i);
+    }
+    int count = 0;
+    while (!StackEmpty(S))
+    {
+        int i;
+        Pop(S, i);
+        topo[count++] = i;
+        ArcNode *p = G.vertices[i].firstarc;
+        while (p)
+        {
+            int k = p->adjvex;
+            if (--indegree[k] == 0)
+                Push(S, k);
+            p = p->nextarc;
+        }
+    }
+    if (count < G.vexnum)
+        return ERROR;
+    return OK;
+}
+
+// 计算完成工程的最短时间，以及影响工程进度的关键活动，并输出
+void CriticalPath(ALGraph G)
+{
+    if (ToplogicalSort(G, topo) == ERROR)
+    {
+        return;
+    }
+    // 初始化事件最早发生时间ve数组为0
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        ve[i] = 0;
+    }
+    // 按拓扑序依次计算每个事件的最早发生时间ve
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        int k = topo[i];
+        ArcNode *p = G.vertices[k].firstarc;
+        while (p)
+        {
+            int j = p->adjvex;
+            if (ve[j] < ve[k] + p->weight)
+            {
+                ve[j] = ve[k] + p->weight;
+            }
+            p = p->nextarc;
+        }
+    }
+    // 初始化事件最晚发生时间vl数组为完成工程的最短时间
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        vl[i] = ve[G.vexnum - 1];
+    }
+    // 按逆拓扑序依次计算每个事件的最晚发生时间vl
+    for (int i = G.vexnum - 1; i >= 0; i--)
+    {
+        int k = topo[i];
+        ArcNode *p = G.vertices[k].firstarc;
+        while (p)
+        {
+            int j = p->adjvex;
+            if (vl[k] > vl[j] - p->weight)
+            {
+                vl[k] = vl[j] - p->weight;
+            }
+            p = p->nextarc;
+        }
+    }
+    cout << "\n 完成工程的最短时间为：" << ve[G.vexnum - 1] << endl;
+    cout << " 影响工程进度的关键活动：" << endl;
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        ArcNode *p = G.vertices[i].firstarc;
+        while (p)
+        {
+            int j = p->adjvex;
+            int e = ve[i];
+            int l = vl[j] - p->weight;
+            if (e == l)
+            {
+                cout << " <" << G.vertices[i].data << "," << G.vertices[j].data << ">" << " " << p->weight << endl;
+            }
+            p = p->nextarc;
+        }
+    }
+}
+
+int main()
+{
+    ALGraph G;
+    CreateDN(G);  // 建立AOE网（有向网）的邻接表
+    PrintGraph(G); // 输出邻接表
+    if (ToplogicalSort(G, topo) == ERROR)
+        cout << "\n 图中有环，工程计划不可行！";
+    else
+        CriticalPath(G);  // 求完成工程的最短时间，以及影响工程进度的关键活动
+    return 0;
+}

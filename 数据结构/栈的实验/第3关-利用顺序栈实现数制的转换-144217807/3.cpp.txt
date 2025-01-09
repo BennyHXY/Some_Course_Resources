@@ -1,0 +1,52 @@
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXSIZE 100
+typedef  int  SElemType;
+typedef struct{
+    	SElemType *base;
+    	SElemType *top;
+    	int stacksize;
+}SqStack;
+Status InitStack(SqStack  &S){
+ 	S.base=new SElemType[MAXSIZE];
+	if (!S.base) exit(OVERFLOW) ;
+  	S.top=S.base;
+ 	S.stacksize=MAXSIZE;
+  	return OK;
+}
+
+bool StackEmpty(SqStack S){
+	return (S.base==S.top);
+}
+
+Status Push(SqStack &S,SElemType e){
+ 	if (S.top-S.base==S.stacksize) return ERROR;
+	*S.top++=e;
+	return OK;
+}
+
+Status Pop(SqStack &S,SElemType &e){
+	if (S.base==S.top) return ERROR;
+	e=*--S.top;
+	return OK;
+}
+void conversion(int N,int r){
+	//利用顺序栈的基本操作，将非负的十进制整数N转换为r进制，并输出。
+	/********** Begin **********/
+    if(N/r) conversion(N/r, r);
+    int x = N%r;
+    if(0 <= x && x <= 9) cout << x;
+    else cout << (char)('A' + x - 10);
+	/********** End **********/
+	
+}
+int main(){
+	int N,r;
+	cin>>N>>r;		
+	conversion(N,r);
+	return 0;	
+}
