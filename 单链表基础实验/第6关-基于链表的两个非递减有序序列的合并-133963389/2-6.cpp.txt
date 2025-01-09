@@ -1,0 +1,86 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//单链表的存储结构
+typedef int ElemType;
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode,*LinkList;
+
+void CreateList(LinkList &L)
+{   //尾插法建立一个带结点的单链表    
+    LinkList p,r;
+	int n;
+    cin>>n; 
+	L=new LNode;
+    L->next=NULL;
+    r=L;
+    for(int i=0;i<n;i++)
+    {
+        p=new LNode;
+        cin>>p->data;        
+        r->next=p;
+        r=p;
+    }
+    r->next=NULL;
+}
+void  OutputList(LinkList L)
+{   //输出单链表
+    LinkList p;
+	p=L->next;
+	while (p){
+	 	cout <<" "<<p->data; 		
+		p=p->next;		
+	}
+}
+void MergeList(LinkList &La,LinkList &Lb,LinkList &Lc){
+   // 初始条件：非递减顺序表La和Lb已存在
+	// 操作结果：将La和Lb的所有元素合并到新表Lc，Lc的元素也按值非递减排列 
+	/********** Begin **********/ 
+   LinkList pa = La->next;
+   LinkList pb = Lb->next;
+   Lc = new LNode;
+   Lc->next = NULL;
+   LinkList pc = Lc;
+
+   while(pa || pb)
+   {
+	   LinkList no = new LNode;
+		no->next = NULL;
+		pc->next = no;
+		pc = no;
+		// cout << "dd1: "<< pa->data << ' ' << pb->data << endl;
+	   if(!pa || (pb && pb->data < pa->data))
+	   {
+		   no->data = pb->data;
+		   pb = pb->next;
+	   }
+		else
+		{
+			no->data = pa->data;
+			pa = pa->next;
+		} 
+
+   }
+
+   
+    /**************end************/
+}//MergeList 
+
+int main()
+{
+    LinkList La,Lb,Lc;
+    int k;
+    CreateList(La);			//建立有序单链表La
+    CreateList(Lb);			//建立有序单链表La
+	MergeList(La,Lb,Lc); 	//将有序单链表La和Lb,合并到Lc（非递减排列）	   
+	OutputList(Lc);  		//输出有序单链表Lc 
+    return 0;
+}

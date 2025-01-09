@@ -1,0 +1,61 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//单链表的存储结构
+typedef int ElemType;
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode,*LinkList;
+//单链表的基本操作 
+void CreateList(LinkList &L)
+{   //尾插法建立一个带结点的单链表    
+    /**************begin************/
+    
+int n; cin >> n;
+L = new LNode;
+L->next = NULL;
+LinkList s = new LNode;
+s = L;
+while (n --) {
+LinkList p = new LNode;
+cin >> p->data;
+p->next = NULL;
+s->next = p;
+s = p;
+}
+
+    /**************end************/
+}
+void  OutputList(LinkList L)
+{   //初始条件：L是带头结点的单链表
+    //操作结果：对L进行遍历，输出单链表（第1个数据前有一个空格，数据之间用一个空格分隔） 
+	/**************begin************/
+	
+    LinkList p;
+p=L->next;
+while (p){
+if (p->next) //若p不是尾结点
+cout <<p->data<<" ";
+else //若p是尾结点
+cout <<p->data;
+p=p->next; //指针指向下一个结点
+}
+
+    
+	/**************end*************/
+}
+
+int main()
+{
+    LinkList L;
+    CreateList(L);//建立一个带头结点的单链表 
+    OutputList(L);//遍历单链表 
+    return 0;
+}

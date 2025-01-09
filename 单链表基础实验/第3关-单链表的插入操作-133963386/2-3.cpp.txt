@@ -1,0 +1,88 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//单链表的存储结构
+typedef int ElemType;
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode,*LinkList;
+
+//单链表的基本操作 
+void CreateList(LinkList &L)
+{   //尾插法建立一个带结点的单链表  
+    LinkList p,r;
+	int n;
+    cin>>n; 
+	L=new LNode;
+    L->next=NULL;    
+    r=L;
+    for(int i=0;i<n;i++)
+    {
+        p=new LNode;
+        cin>>p->data;        
+        r->next=p;
+        r=p;
+    }
+    r->next=NULL;
+}
+void  OutputList(LinkList L)
+{	//输出单链表   
+	LinkList p;
+	p=L->next;
+	while (p){
+	 	cout <<" "<<p->data; 		
+		p=p->next;		
+	}
+}
+
+Status ListInsert(LinkList &L,int pos ,ElemType e)
+{  // 初始条件：单链表L已存在
+   // 操作结果：在L中第i个位置之前插入新的数据元素e,若插入成功，返回OK,否则返回ERROR
+   if(pos <= 0) return ERROR;
+    LinkList u = new LNode;
+    u->data = e;
+
+    LinkList p = L;
+    for(int i = 1; i <= pos - 1; ++i)
+    {
+        if(p->next == NULL) return ERROR;
+        p = p->next;
+    }
+
+    LinkList v = p->next;
+    p->next = u;
+    u->next = v;
+    return OK;
+	/**************end************/
+}
+
+int main()
+{
+    LinkList L;
+    int i;
+	ElemType e; 
+    CreateList(L);	//建立带头结点的单链表L 
+    //输入插入位置i和待插入的元素e，调用插入函数，并输出相应的结果
+    /********** Begin **********/ 
+	int pos, x;
+    cin >> pos >> x;
+    int st = ListInsert(L, pos, x);
+    if(st == OK) cout << "插入成功" << endl;
+    else cout << "插入失败" << endl;
+    LinkList p = L;
+    while(p->next != NULL)
+    {
+        p = p->next;
+        cout << ' ' << p->data;
+    }
+    
+	/********** End ***********/ 
+    return 0;
+}

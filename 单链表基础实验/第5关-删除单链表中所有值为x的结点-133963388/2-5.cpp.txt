@@ -1,0 +1,74 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//单链表的存储结构
+typedef int ElemType;
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode,*LinkList;
+
+void CreateList(LinkList &L)
+{   //尾插法建立一个带结点的单链表    
+    LinkList p,r;
+	int n;
+    cin>>n; 
+	L=new LNode;
+    L->next=NULL;
+    r=L;
+    for(int i=0;i<n;i++)
+    {
+        p=new LNode;
+        cin>>p->data;        
+        r->next=p;
+        r=p;
+    }
+    r->next=NULL;
+}
+void  OutputList(LinkList L)
+{   //输出单链表
+    LinkList p;
+	p=L->next;
+	while (p){
+	 	cout <<" "<<p->data; 		
+		p=p->next;		
+	}
+}
+void Deletex(LinkList &L,ElemType x)
+{   // 初始条件：单链表L已存在
+	// 操作结果：删除表L中所有数据值为x的结点 	 
+	
+	LinkList u = L->next;
+	LinkList pre = L;
+
+	while(u != NULL)
+	{
+		LinkList v = u->next;
+		if(u -> data == x)
+		{
+			pre->next = u->next;
+			delete u;
+		}
+		else pre = u;
+		u = v;
+	}
+    
+    /**************end************/
+}
+
+int main()
+{
+    LinkList L;
+    ElemType x;
+    CreateList(L);//建立单链表 
+	cin>>x;		  //输入x    
+	Deletex(L,x); //删除单链表中所有数据值为x的结点 
+	OutputList(L);//输出单链表   
+    return 0;
+}

@@ -1,0 +1,68 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//单链表的存储结构
+typedef int ElemType;
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode,*LinkList;
+ 
+void CreateList(LinkList &L)
+{   //尾插法建立一个带结点的单链表    
+    LinkList p,r;
+	int n;
+    cin>>n; 
+	L=new LNode;
+    L->next=NULL;    
+    r=L;
+    for(int i=0;i<n;i++)
+    {
+        p=new LNode;
+        cin>>p->data;        
+        r->next=p;
+        r=p;
+    }
+    r->next=NULL;
+}
+
+void MaxMinData(LinkList L,ElemType &maxx,ElemType &minn)
+{  	//初始条件：L是带头结点的单链表
+	//操作结果：若链表L非空，分别用max和min返回链表的最大值和最小值(若链表为空，则max和min返回-1）。 
+    /**************begin************/
+    LinkList p = L;
+    maxx = -1e9;
+    minn = 1e9;
+    if(L->next == NULL)
+    {
+        maxx = -1;
+        minn = -1;
+        return ;
+    }
+    p = p->next;
+    while(p != NULL)
+    {
+        minn = min(minn, p->data);
+        maxx = max(maxx, p->data);
+        p = p->next;
+    }
+
+
+    /**************end************/
+}
+
+int main()
+{
+    LinkList L;
+    CreateList(L);	
+    ElemType max,min;
+    MaxMinData(L,max,min);		//计算链表的最大值和最小值
+	cout<<max<<endl<<min;		//输出最大值和最小值 
+    return 0;
+}
