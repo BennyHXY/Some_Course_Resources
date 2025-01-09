@@ -1,0 +1,70 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#define MAXLEN 255
+typedef struct{
+	char ch[MAXLEN+1];		//从1号下标开始存储串值 
+	int length;				//串的长度 
+}SString;        			//串的定长顺序存储结构     
+
+void InputStr(SString &s)	//输入串 
+{	
+    char str[MAXLEN];
+	int i;
+	cin>>str;
+	for (i=0;str[i]!='\0';i++)
+			s.ch[i+1]=str[i];
+	s.length=i;
+}
+void Count(SString s,int a[],int b[] )
+{   //初始条件：采用定长分配存储的串s已经存在 
+	//操作结果：统计串s的数字字符和大写字母的频度,分别存入数组a和b
+    /**************begin************/
+	int len = s.length;
+    for(int i = 1; i <= len; ++i)
+    {
+        char x = s.ch[i];
+        if('0' <= x && x <= '9') ++a[x - '0'];
+        if('A' <= x && x <= 'Z') ++b[x - 'A'];
+    }
+
+	/**************end**************/
+}
+bool Palindrome(SString s)
+{	//初始条件：采用定长分配存储的串s已经存在 
+	//操作结果：判断串s是否为回文字符串 
+	/**************begin************/
+	int len = s.length;
+    int mid = len / 2;
+    for(int i = 1; i < mid; ++i)
+    {
+        if(s.ch[i] != s.ch[len + 1 - i]) return false;
+    }
+
+    return true;
+	/**************end**************/
+}
+int main()
+{   SString s;        	// 定义定长分配存储表示的串变量s
+    InputStr(s);        //输入串s
+    int a[10]={0};    	//定义数组a,用于统计10个数字字符的频度，初值为0 
+    int b[26]={0};  	//定义数组b,用于统计26个大写字母的频度，初值为0 
+    Count(s,a,b);		//调用函数，统计字符频度	
+	//按照ASCII码从小到大的顺序输出字符频度（只输出存在的字符，格式为"字符:频度"，字符频度输出占两位） 
+	/**************begin************/	
+    for(int i = 0; i <= 9; ++i) if(a[i])
+    {
+        cout << i << ": " << a[i] << endl;
+    }
+    for(int i = 0; i < 26; ++i) if(b[i])
+    {
+        // cout << (char)('A' + i) << ": " << b[i] << endl;
+        printf("%c:%2d\n", 'A' + i, b[i]);
+    }
+
+    
+	/**************end**************/
+	if (Palindrome(s)) cout<<"Yes!";//调用函数判断串s是否是回文
+	else cout<<"No!";
+    return 0;
+}

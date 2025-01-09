@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+#define MAXLEN 255
+typedef struct{
+	char ch[MAXLEN+1];		//从1号下标开始存储串值 
+	int length;				//串的长度 
+}SString;        			//串的定长顺序存储结构     
+
+void InputStr(SString &s)	//输入串 
+{	
+    char str[MAXLEN];
+	int i;
+	cin>>str;
+	for (i=0;str[i]!='\0';i++)
+			s.ch[i+1]=str[i];
+	s.length=i;
+}
+int Index_BF(SString s,SString t)
+{   //在串s中查找串t的首次出现位置，如不存在，则返回0 
+	/***************begin*************/ 
+     
+        for(int i = 1; i <= s.length - t.length + 1; ++i)
+        {
+            for(int j = 1; j <= t.length ; ++j)
+            {
+                if(s.ch[i + j - 1] != t.ch[j]) break;
+                if(j == t.length) return i;
+            }
+        }
+
+     return 0;
+	/***************end *************/
+}
+
+int main() 
+{	
+    SString s,t;
+    InputStr(s);				//输入主串s
+	InputStr(t);				//输入子串t
+	cout<<Index_BF(s,t);		//输出查找结果	
+	return 0; 
+}

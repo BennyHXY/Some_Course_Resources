@@ -1,0 +1,65 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+#define MAXLEN 255
+typedef struct{
+	char ch[MAXLEN+1];		//从1号下标开始存储串值 
+	int length;				//串的长度 
+}SString;        			//串的定长顺序存储结构     
+
+void InputStr(SString &s)	//输入串 
+{	
+    char str[MAXLEN];
+	int i;
+	cin>>str;
+	for (i=0;str[i]!='\0';i++)
+			s.ch[i+1]=str[i];
+	s.length=i;
+}
+
+void OutputStr(SString s)	//输出串
+{ 
+	for (int i=1;i<=s.length;i++) 
+		cout<<s.ch[i];	
+}
+
+Status SubString(SString s,SString &sub,int  pos,int len){
+	//在串s的第pos位置开始取出len个字符，存入串sub,若成功，返回OK,否则返回ERROR 
+	/********************begin********************/
+ 	if(pos <= 0 || pos + len - 1 > s.length) return ERROR;
+     sub.length = len;
+     for(int i = 1; i <= len; ++i)
+     {
+         sub.ch[i] = s.ch[pos + i - 1];
+     }
+    return OK;
+  	/********************end ********************/
+}
+
+
+int main() 
+{	
+    SString s,sub;
+    int pos,len; 
+    InputStr(s);				//输入串s
+	cin>>pos;                   //输入待取子串的位置
+	cin>>len;                   //输入待取子串的长度
+	//调用取子串函数，并按要求输出。 
+	/********************begin********************/
+	
+    
+    int st = SubString(s, sub, pos, len);
+    if(st == OK)
+    {
+        OutputStr(sub);
+    }
+    else cout << "Error!";
+	
+	/********************end ********************/	
+	return 0; 
+}

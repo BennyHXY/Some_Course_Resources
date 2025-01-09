@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+#define MAXLEN 20			//串的最大长度 
+typedef struct{
+	char ch[MAXLEN+1];		//从1号下标开始存储串值 
+	int length;				//串的长度 
+}SString;        			//串的定长顺序存储结构     
+
+void InputStr(SString &s)	//输入串 
+{	
+    char str[MAXLEN];
+	int i;
+	cin>>str;
+	for (i=0;str[i]!='\0';i++)
+			s.ch[i+1]=str[i];
+	s.length=i;
+}
+void OutputStr(SString s)	//输出串
+{ 
+	for (int i=1;i<=s.length;i++) 
+		cout<<s.ch[i];	
+}
+
+Status InsertStr(SString &s,int pos, SString t)
+{   //初始条件：采用定长分配存储的串s和串t已经存在 
+	//操作结果：如pos不合法或串t插入后的长度超出串的最大长度，函数返回ERROR，否则在串s的第pos位置插入串t， 函数返回OK 
+	/***************begin*************/ 
+    int len = t.length;
+    if(pos < 1 || pos > s.length + 1) return ERROR;
+    if(s.length + t.length > MAXLEN) return ERROR;
+    
+    // cout << "dd:" << s.length << endl;
+    for(int i = s.length; i >= pos; --i)
+    {
+        s.ch[i + len] = s.ch[i];
+    }
+	for(int i = pos + len - 1; i >= pos; --i)
+    {
+        s.ch[i] = t.ch[i - pos + 1];
+    }
+    s.length = s.length + t.length;
+    return OK;
+	/***************end *************/
+}
+
+int main() 
+{	
+    SString s,t;
+    int pos; 
+    InputStr(s);					//输入串s
+    cin>>pos;						//输入插入位置 
+	InputStr(t);					//输入串t
+	if (InsertStr(s,pos,t)==ERROR) 	//调用插入函数 
+		cout<<"Error!";
+	else OutputStr(s);				//输出串s 
+	return 0; 
+}
