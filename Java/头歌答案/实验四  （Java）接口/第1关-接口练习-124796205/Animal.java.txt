@@ -1,0 +1,8 @@
+package step2;
+//定义Animal接口
+public interface Animal
+{
+    public void Speak();
+    public void Walk();
+    public String toString();
+}

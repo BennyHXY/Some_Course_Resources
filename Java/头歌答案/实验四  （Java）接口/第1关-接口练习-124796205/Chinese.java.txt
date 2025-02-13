@@ -1,0 +1,17 @@
+package step2;
+//完成Chinese类
+public class Chinese extends People
+{
+   public void Speak()
+    {
+        System.out.println("不发声");
+    }
+    public void Walk()
+    {
+        System.out.println("不知道有多少条腿走路");
+    }
+    public String toString()
+    {
+        return "中国人";
+    } 
+}

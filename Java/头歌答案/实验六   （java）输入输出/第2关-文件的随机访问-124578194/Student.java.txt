@@ -1,0 +1,51 @@
+package step2;
+import java.io.*;
+//在此写Student类
+public class Student {
+    char name[]= {'\u0000','\u0000','\u0000','\u0000','\u0000','\u0000','\u0000','\u0000','\u0000','\u0000'};
+    int age;
+    public Student(String name,int age) throws Exception {
+        if(name.toCharArray().length>10) {
+            System.arraycopy(name.toCharArray(), 0, this.name, 0, 10);
+        }else {
+            System.arraycopy(name.toCharArray(), 0, this.name, 0, name.toCharArray().length);
+        }
+        this.age=age;
+    }
+    public void print() {
+        System.out.println("name:"+name.toString());
+        System.out.println("age:"+age);
+    }
+}
+
+// package step2;
+
+//在此写RWClass类
+// public
+class RWClass {
+ 
+    String filename;
+    public RWClass(String Filename) {
+        filename=Filename;
+    }
+    public void saveStudent(Student ss,int pos) throws Exception{
+        RandomAccessFile ra=new RandomAccessFile(filename,"rw");
+        ra.seek(pos*24);
+        for(int i=0;i<10;i++) {
+            ra.writeChar(ss.name[pos]);
+        }
+        ra.writeInt(ss.age);
+        ra.close();
+    }
+    public Student readStudent(int pos) throws Exception{
+        char buf[]=new char[10];
+        RandomAccessFile ra=new RandomAccessFile(filename,"r");
+        ra.seek(pos*24);
+        for(int i=0;i<10;i++) {
+            buf[i]=ra.readChar();
+        }
+        Student ss=new Student(buf.toString(),ra.readInt());
+        ra.close();
+        return ss;
+    }
+}

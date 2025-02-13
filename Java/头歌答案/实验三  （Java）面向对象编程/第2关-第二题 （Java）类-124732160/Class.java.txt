@@ -1,0 +1,136 @@
+package step2;
+//在这些Class类
+class Course {
+    private int id;
+    private String name;
+    private int credit;
+    private boolean hk;
+    private int cj;
+
+    public Course(int id, String name, int credit) {
+        this.id = id;
+        this.name = name;
+        this.credit = credit;
+        this.hk = false;
+        this.cj = 0;
+    }
+
+	String getName() {
+		return name;
+	}
+
+    void sethk(boolean hk) {
+        this.hk = hk;
+    }
+
+    boolean gethk() {
+        return hk;
+    }
+
+    void setcj(int cj) {
+        this.cj = cj;
+    }
+
+    int getcj() {
+        return cj;
+    }
+
+    int getCredit() {
+        return credit;
+    }
+
+    @Override
+    public String toString() {
+        String ret = "zss";
+        return ret;
+    }
+
+}
+
+class Student {
+    private int id;
+    private String name;
+    private int nCourse;
+    private int pCourse;
+    Course[] myCourses;
+
+    public Student(int id, String name, int nCourse) {
+        this.id = id;
+        this.name = name;
+        this.nCourse = nCourse;
+        this.pCourse = 0;
+        myCourses = new Course[nCourse];
+    }
+
+    void addCourse(Object course) {
+
+        if(course instanceof Course)
+        {
+            myCourses[pCourse++] = (Course) course;
+        }
+
+    }
+
+    int GetCourseNum() {
+        return nCourse;
+    }
+
+    Object GetCourse(int index) {
+        return myCourses[index];
+    }
+
+    int calculateAvgGrade() {
+        int sum = 0;
+        int num = 0;
+
+        for(int i = 0; i < nCourse; ++i) {
+            if(myCourses[i].gethk()) continue;
+            sum += myCourses[i].getcj();
+            ++num;
+        }
+
+        if(num == 0) return 0;
+
+        return sum / num;
+    }
+
+    @Override
+    public String toString() {
+        String ret = "zss";
+        return ret;
+    }
+
+}
+
+class Class {
+    private String name;
+    private int num;
+    Student[] studentList;
+    private int pList = 0;
+
+    public Class(int num, String name) {
+        this.num = num;
+        this.name = name;
+        studentList = new Student[num + 5];
+    }
+
+    void addStudent(Object student) {
+        studentList[pList++] = (Student) student;
+    }
+
+    int GetStudentNum() {
+        return num;
+    }
+    
+    Object GetStudent(int index) {
+        return studentList[index];
+    }
+
+    @Override
+    public String toString() {
+        String ret = "随便什么字符串就可以";
+        
+        return ret;
+    }
+
+}

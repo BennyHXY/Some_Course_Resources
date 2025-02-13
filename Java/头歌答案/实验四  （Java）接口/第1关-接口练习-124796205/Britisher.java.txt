@@ -1,0 +1,17 @@
+package step2;
+//完成Britisher类
+public class Britisher extends People
+{
+    public void Speak()
+    {
+        System.out.println("不发声");
+    }
+    public void Walk()
+    {
+        System.out.println("不知道有多少条腿走路");
+    }
+    public String toString()
+    {
+        return "英国人";
+    }
+}

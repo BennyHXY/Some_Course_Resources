@@ -1,0 +1,104 @@
+package step1;
+//在此写dataObj类
+public class dataObj{
+    public int vul;
+    public int state=1;
+    public void put(int n){
+        vul=n;
+    }
+    public int get(){
+        return vul;
+    }
+    public synchronized void func1(int n){
+        if(state!=1){
+            try{
+                wait();
+            }
+            catch(Exception e){
+
+            }
+        }
+        vul=n;
+        System.out.print(vul+" ");
+        state=2;
+        notify();
+    }
+    public synchronized void func2(){
+        if(state!=2){
+            try{
+                wait();
+            }
+            catch(Exception e){
+
+            }
+        }
+        vul+=10;
+        System.out.print(vul+" ");
+        state=3;
+        notify();
+    }
+    public synchronized void func3(){
+        if(state!=3){
+            try{
+                wait();
+            }
+            catch(Exception e){
+
+            }
+        }
+        System.out.print((vul+10)+" ");
+        System.out.println();
+        state=1;
+        notify();
+    }
+}
+
+// package step1;
+//在此写Thread1类
+// public 
+class Thread1 extends Gatherinfo implements Runnable{
+    public dataObj d;
+    public Thread1(dataObj d){
+        this.d=d;
+    }
+    public void run(){
+		// System.out.println("验证码：149760");
+        for(int i=0;i<10;i++){
+            int t=GetVal();
+			// int t = 10;
+            d.func1(t);
+			
+        }
+    }
+}
+
+// package step1;
+//在此写Thread2类
+// public 
+class Thread2 extends Thread{
+    dataObj d;
+    public Thread2(dataObj d){
+        this.d=d;
+    }
+    public void run(){
+        for(int i=0;i<10;i++){
+            d.func2();
+        }
+    }
+}
+
+// package step1;
+//在此写Thread3类
+// public 
+class Thread3 extends Thread{
+    dataObj d;
+    public Thread3(dataObj d){
+        this.d=d;
+    }
+    public void run(){
+        for(int i=0;i<10;i++){
+            d.func3();
+        }
+    }
+}
+

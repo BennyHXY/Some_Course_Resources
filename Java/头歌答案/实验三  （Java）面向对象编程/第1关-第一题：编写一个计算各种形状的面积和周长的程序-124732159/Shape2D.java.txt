@@ -1,0 +1,88 @@
+package step1;
+
+public abstract class Shape2D {
+    //在这完成Shape2D类的程序的编写
+    
+    abstract public double getArea();
+    abstract public double getL();
+
+    static double PI = 3.14159;
+}
+
+class Circle extends Shape2D {
+    double r;
+    public Circle(double r) {
+        this.r = r;
+    }
+
+    @Override
+    public double getArea() {
+        return PI * r * r;
+    }
+
+    @Override
+    public double getL() {
+        return PI * 2 * r;
+    }
+
+}
+
+class Triangle extends Shape2D {
+    double a, b, c;
+
+    public Triangle(double a, double b, double c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+    static boolean check(double a, double b, double c) {
+        if(a + b <= c || a + c <= b || b + c <= a) return false;
+        else return true;
+    }
+
+    @Override
+    public double getArea() {
+        if(!check(a, b, c)) return -1;
+        double p = (a + b + c) / 2.0;
+        double ret = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+        return ret;
+    }
+
+    @Override
+    public double getL() {
+        if(!check(a, b, c)) return -1;
+        return a + b + c;
+    }
+
+}
+
+class Rectangle extends Shape2D {
+    double a, b;
+
+    public Rectangle(double a, double b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    public Rectangle() {
+
+    }
+
+    @Override
+    public double getArea() {
+        return a * b;
+    }
+
+    @Override
+    public double getL() {
+        return 2 * (a + b);
+    }
+
+}
+
+class Square extends Rectangle {
+    public Square(double a) {
+        super(a,a);
+    }
+}

@@ -1,0 +1,83 @@
+package step1;
+import java.util.*;
+//在此写Class类
+ 
+public class Class {
+    String classname = null;
+    String stuname = null;
+    HashMap<String,ArrayList<HashMap<String,Integer>>> nameprojects = new HashMap<>();//姓名、课程
+ 
+    public Class(String classname){
+        this.classname = classname;
+    }
+ 
+    public void addCourseGrade(String stuname,String Coursename,Integer grade){
+        ArrayList<HashMap<String,Integer>> stuList = nameprojects.get(stuname);
+        if(stuList == null) {
+            stuList = new ArrayList<>();
+            nameprojects.put(stuname, stuList);
+        }
+        HashMap<String,Integer> courseGrade = new HashMap<>();
+        courseGrade.put(Coursename, grade);
+        stuList.add(courseGrade);
+    }
+    public void addCourseGrade(String stuname,String[] Coursenames,Integer[] grades){
+        for(int i = 0;i < Coursenames.length;i++){
+            ArrayList<HashMap<String,Integer>> stuList = nameprojects.get(stuname);
+            if(stuList == null) {
+                stuList = new ArrayList<>();
+                nameprojects.put(stuname, stuList);
+            }
+            HashMap<String,Integer> courseGrade = new HashMap<>();
+            courseGrade.put(Coursenames[i], grades[i]);
+            stuList.add(courseGrade);
+        }
+    }
+ 
+    public void delStudent(String stuname){
+        nameprojects.remove(stuname);
+    }
+ 
+    public void delStuCourse(String stuname,String Coursename) {
+        for (Map.Entry<String, ArrayList<HashMap<String, Integer>>> delet : nameprojects.entrySet()) {
+            if (delet.getKey().equals(stuname)) {
+                for(HashMap<String,Integer> deletCourse : delet.getValue()){
+                    deletCourse.remove(Coursename);
+                }
+            }
+        }
+    }
+ 
+    public double getPerAvgStudent(String stuname){
+        double sum = 0;
+        int count = 0;
+        for (Map.Entry<String,ArrayList<HashMap<String,Integer>>> find_name : nameprojects.entrySet()) {
+            if(find_name.getKey().equals(stuname)){
+                for(HashMap<String,Integer> SUM : find_name.getValue()){
+                    for(Map.Entry<String,Integer> Sum : SUM.entrySet()){
+                        sum = sum + Sum.getValue();
+                        count++;
+                    }
+ 
+                }
+            }
+        }
+        return sum/count;
+    }
+ 
+    public double getClassAvgCourse(String Coursename){
+        double sum = 0;
+        int count = 0;
+        for (Map.Entry<String,ArrayList<HashMap<String,Integer>>> find_name : nameprojects.entrySet()) {
+            for(HashMap<String,Integer> SUM : find_name.getValue()){
+                for(Map.Entry<String,Integer> Sum : SUM.entrySet()){
+                    if(Sum.getKey().equals(Coursename)){
+                        sum = sum + Sum.getValue();
+                        count++;
+                    }
+                }
+            }
+        }
+        return sum/count;
+    }
+}

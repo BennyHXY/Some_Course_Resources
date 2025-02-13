@@ -1,0 +1,72 @@
+package step1;
+import java.util.Arrays;
+//在此写MyObjectArray类
+public class MyObjectArray implements MyList
+{
+    private Object[] array = null;
+    private int cindex = 0;
+    private int incSize = 0;
+
+    public MyObjectArray()
+    {
+
+    }
+
+    public MyObjectArray(int incSize)
+    {
+        if(incSize < 0)
+        {
+            this.incSize = 5;
+        }
+        else{
+            this.incSize = incSize;
+        }
+        this.array = new Object[this.incSize];
+    }
+    @Override
+    public void add(Object obj)
+    {
+        if(cindex == array.length)
+        {
+            array = Arrays.copyOf(array,array.length + incSize);
+        }
+        array[cindex] = obj;
+        cindex++;
+    }
+    @Override
+    public void clear()
+    {
+        this.array = new Object[5];
+        cindex = 0;
+    }
+    @Override
+    public boolean isEmpty()
+    {
+        boolean flag = false;
+        if(array[0] == null)
+        {
+            flag = true;
+        }
+        return flag;
+    }
+    @Override
+    public int size()
+    {
+        return cindex;
+    }
+    @Override
+    public int capacity()
+    {
+        return this.array.length;
+    }
+    @Override
+    public Object get(int index)
+    {
+        Object obj = null;
+        if(index > 0 && index < cindex)
+        {
+            obj = this.array[index];
+        }
+        return obj;
+    }
+}

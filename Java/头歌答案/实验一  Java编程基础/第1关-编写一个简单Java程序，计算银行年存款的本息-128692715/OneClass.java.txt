@@ -1,0 +1,42 @@
+
+package step;
+
+import java.io.*;
+import java.util.*;
+
+public class OneClass{
+  //在此完成相应程序
+    
+	public static double Calculate(double bj, double lv, int nyear)
+	{
+		
+		System.out.println("本金：" + bj);
+		System.out.println("存款年限：" + nyear);
+		System.out.println("利率：" + lv);
+		System.out.println("利息：：" + (bj * lv));
+		
+		double tmp = (bj) * Math.pow((1 + lv), nyear);
+
+		System.out.println("总额：" + tmp);
+		
+		return tmp;
+		
+	}
+	
+	
+	public static void main(String[] args) throws IOException
+	{
+		
+		Scanner in = new Scanner(System.in);
+		
+		double bj = in.nextDouble();
+		double lv = in.nextDouble();
+		int nyear = in.nextInt();
+		
+		Calculate(bj, lv, nyear);
+		
+		
+	}
+    
+  
+}

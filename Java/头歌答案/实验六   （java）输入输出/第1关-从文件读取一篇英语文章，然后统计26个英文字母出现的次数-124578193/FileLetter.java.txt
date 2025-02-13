@@ -1,0 +1,33 @@
+package step1;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+//在此写FileLetter类
+ 
+public class FileLetter {
+    
+    private FileInputStream read;
+    
+    public int[] LetterStatistics(String strFilename){
+        try{
+            read=new FileInputStream(strFilename);
+            int[] letter=new int[26];
+            int b=read.read();
+            char a='a';char A='A';
+            while(b!=-1) {
+                if(b-(int)a>=0&&b-(int)a<26) {
+                    letter[b-(int)a]++;
+                }
+                else if(b-(int)A>=0&&b-(int)A<26) {
+                    letter[b-(int)A]++;
+                }
+                b=read.read();
+            }
+            read.close();
+            return letter;
+        }catch(IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        }    
+    }
+}

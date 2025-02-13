@@ -1,0 +1,11 @@
+package step1;
+//在此写接口MyList
+public interface MyList
+{
+    void add(Object obj);
+    Object get(int index);
+    void clear();
+    boolean isEmpty();
+    int size();
+    int capacity();
+}

@@ -1,0 +1,22 @@
+package step2;
+//完成Dog类
+public class Dog implements Animal
+{
+    @Override
+    public void Speak()
+    {
+        System.out.println("不发声");
+    }
+    @Override
+    public void Walk()
+    {
+        System.out.println("不知道有多少条腿走路");
+    }
+    @Override
+    public String toString()
+    {
+        return "狗";
+    }
+    
+
+}

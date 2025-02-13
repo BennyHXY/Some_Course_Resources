@@ -1,0 +1,68 @@
+package step1;
+import java.util.Arrays;
+//在此写MyDoubleArray类
+public class MyDoubleArray implements MyList
+{
+	private Object[] array = null;
+    private int cindex = 0;
+    private int initSize = 0;
+    public MyDoubleArray(){}
+    public MyDoubleArray(int initSize)
+    {
+        if(initSize < 0)
+        {
+            this.initSize = 10;
+        }
+        else
+        {
+            this.initSize = initSize;
+        }
+        array = new Object[this.initSize];
+    }
+    @Override
+    public void add(Object obj)
+    {
+        if(this.cindex == array.length)
+        {
+            array = Arrays.copyOf(array,array.length + array.length);
+        }
+        array[cindex] = obj;
+        cindex++;
+    }
+    @Override
+    public Object get(int index)
+    {
+        Object obj = null;
+        if(index > 0 && index < this.cindex)
+        {
+            obj = array[index];
+        }
+        return obj;
+    }
+    @Override
+    public void clear()
+    {
+        array = new Object[10];
+        cindex = 0;
+    }
+    @Override
+    public boolean isEmpty()
+    {
+        boolean flag = false;
+        if(array[0] == null)
+        {
+            flag = true;
+        }
+        return flag;
+    }
+    @Override
+    public int size()
+    {
+        return this.cindex;
+    }
+    @Override
+    public int capacity()
+    {
+        return this.array.length;
+    }
+}

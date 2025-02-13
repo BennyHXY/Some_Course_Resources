@@ -1,0 +1,21 @@
+package step2;
+//完成Centipede类
+import java.util.*;
+public class Centipede implements Animal
+{
+    @Override
+    public void Speak()
+    {
+        System.out.println("不发声");
+    }
+    @Override
+    public void Walk()
+    {
+        System.out.println("不知道有多少条腿走路");
+    }
+    @Override
+    public String toString()
+    {
+        return "蜈蚣";
+    }
+}
