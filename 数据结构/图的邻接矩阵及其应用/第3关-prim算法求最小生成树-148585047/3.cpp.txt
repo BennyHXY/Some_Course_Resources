@@ -1,0 +1,62 @@
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#include "graph.h"		//图的定义、无向网的建立以及输出函数 
+
+typedef struct{
+   char adjvex;
+   int 	lowcost;
+}node;
+node closedge[MVNum];	//定义待选边辅助数组 
+ 
+int Min(AMGraph G)
+{	//从待选边辅助数组closeedge中选择最小边closedge[k],返回k 
+   /****************begin****************/
+   int indexmin = 0, min = MaxInt;
+   for (int i = 0; i < G.vexnum; i ++ ) {
+		if (min > closedge[i].lowcost && closedge[i].lowcost != 0 && closedge[i].lowcost != MaxInt) {
+			indexmin = i;
+			min = closedge[i].lowcost;
+        }
+   }
+   return indexmin;
+   /******************end****************/
+}
+  
+int MiniSpanTree(AMGraph G,char u)
+{	//从顶点u出发构造最小生成树T，输出T的各条边，函数返回T的代价    
+	/****************begin****************/	
+	int valu = 0;
+	int k = LocateVex(G, u);
+	for (int j = 0; j < G.vexnum; j ++ ) 
+		if (j != k) closedge[j] = {u, G.arcs[k][j]} ;
+  	closedge[k].lowcost = 0;
+  	for (int i = 1; i < G.vexnum;  i ++ ) {
+  		k = Min(G) ;
+  		char u0 = closedge[k].adjvex;
+		char v0 = G.vexs[k];
+		valu += closedge[k].lowcost;
+		cout << "\n(" << u0 << "," << v0 << ")" << " " << closedge[k].lowcost; 
+		closedge[k].lowcost = 0;
+		for (int j = 0; j < G.vexnum; j ++ ) 
+			if (G.arcs[k][j] < closedge[j].lowcost){
+				closedge[j].adjvex = G.vexs[k];
+				closedge[j].lowcost = G.arcs[k][j];
+			}
+	  }
+	/****************end****************/
+	return valu;
+}
+int main()
+{
+  	AMGraph G;
+	char u;
+	int MSTcost;
+  	CreateUDN(G);					//建立无向网的邻接矩阵
+  	cin>>u;						//输入起始顶点
+	PrintGraph(G);					//输出无向网 
+	cout<<"\n\n最小生成树的边："; 	
+  	MSTcost=MiniSpanTree(G,u);		// 从顶点u出发构造最小生成树T
+	cout<<"\n\n最小生成树的代价：\n"<<MSTcost;    	
+ 	return 0;   
+}

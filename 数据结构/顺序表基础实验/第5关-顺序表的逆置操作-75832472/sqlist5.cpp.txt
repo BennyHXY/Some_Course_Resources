@@ -1,0 +1,66 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//顺序表的存储结构
+#define MAXSIZE 100  
+typedef int ElemType;
+typedef struct{
+   ElemType *elem;
+   int length;
+}SqList;
+/*****顺序表的基本操作*****/
+Status InitList(SqList  &L){
+	//建立一个顺序表L 
+  	L.elem=new ElemType[MAXSIZE]; 	
+	if (!L.elem) exit(OVERFLOW);
+    int n;
+    cin>>n;             		//输入数据个数
+    if (n<=0) L.length=0;
+	else {
+		for (int i=0;i<n;i++) 	//输入n个数据
+        	cin>>L.elem[i];
+     	L.length=n;
+	}
+	return OK; 	
+}
+void OutputList(SqList L){ 
+	//输出顺序表  
+    for (int i=0;i<L.length;i++)
+        cout<<" "<<L.elem[i];   
+}
+void ListRervese(SqList &L){ 
+	// 初始条件：顺序线性表L已存在
+	// 操作结果：将顺序表中逆置，要求空间复杂度为O(1) 
+	/********** Begin **********/ 
+	int lim = (L.length - 1) / 2;
+    for(int i = 0; i <= lim; ++i)
+    {
+        int j = L.length - 1 - i;
+        //swap
+        int t = L.elem[i];
+        L.elem[i] = L.elem[j];
+        L.elem[j] = t;
+    }
+
+	/********** End **********/	
+}
+void DestroyList(SqList &L){
+	//顺序表的销毁 
+	delete []L.elem;
+	L.elem=NULL;
+	L.length=0;		
+}
+int main(){
+	SqList L;	    
+	InitList(L);		//建立顺序表
+	ListRervese(L);		//将顺序表逆置存放
+	OutputList(L); 		//输出顺序表 
+	DestroyList(L);		//销毁顺序表 
+	return 0; 
+}

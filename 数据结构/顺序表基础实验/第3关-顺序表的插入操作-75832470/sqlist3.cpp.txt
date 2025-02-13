@@ -1,0 +1,88 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//顺序表的存储结构
+#define MAXSIZE 100  
+typedef int ElemType;
+typedef struct{
+   ElemType *elem;
+   int length;
+}SqList;
+/*****顺序表的基本操作*****/
+Status InitList(SqList  &L){
+	//建立一个顺序表L 
+  	L.elem=new ElemType[MAXSIZE]; 	
+	if (!L.elem) exit(OVERFLOW);
+    int n;
+    cin>>n;             		//输入数据个数
+    if (n<=0) L.length=0;
+	else {
+		for (int i=0;i<n;i++) 	//输入n个数据
+        	cin>>L.elem[i];
+     	L.length=n;
+	}
+	return OK; 	
+}
+void OutputList(SqList L){ 
+	//输出顺序表  
+    for (int i=0;i<L.length;i++)
+        cout<<" "<<L.elem[i];   
+}
+Status ListInsert(SqList &L,int pos,ElemType e){
+	// 初始条件：顺序线性表L已存在，1≤i≤ListLength(L)+1
+	// 操作结果：在L中第i个位置之前插入新的数据元素e,插入成功，返回OK,否则返回ERROR 
+	/********** Begin **********/ 
+	if(pos <= 0 || L.length + 1 < pos) return ERROR;
+    for(int i = L.length - 1; i >= pos - 1; --i)
+    {
+        L.elem[i + 1] = L.elem[i];
+    } 
+    L.elem[pos - 1] = e;
+    L.length++;
+    return OK;
+	/********** End ***********/
+	
+}
+
+void DestroyList(SqList &L){
+	//顺序表的销毁 
+	delete []L.elem;
+	L.elem=NULL;
+	L.length=0;		
+}
+
+int main(){
+	SqList L;
+	int i;
+	ElemType e; 
+    //建立顺序表
+	InitList(L);
+	//输入插入位置pos和待插入的元素e，调用插入函数，并输出相应的结果
+    /********** Begin **********/ 
+	int pos, x;
+    cin >> pos >> x;
+    int st = ListInsert(L, pos, x);
+    if(st == 0)
+    {
+        cout << "插入失败！";
+    }
+    else
+    {
+        cout << "插入成功，插入后顺序表如下：" << endl;
+        int lim = L.length;
+        for(int i = 0; i < lim; ++i)
+        {
+            cout << ' ' << L.elem[i];
+        }
+    }
+	
+	/********** End ***********/
+	DestroyList(L);//销毁数据表
+	return 0; 
+}

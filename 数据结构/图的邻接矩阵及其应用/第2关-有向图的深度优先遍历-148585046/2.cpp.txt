@@ -1,0 +1,100 @@
+#include <iostream> 
+using namespace std;
+
+#define MaxInt 32767   			   //最大值
+#define MVNum 20    			      //最大顶点数
+typedef  struct {
+   int  vexnum,arcnum;		 	   //顶点数和弧的数目 
+   char vexs[MVNum]; 			   //顶点向量
+   int  arcs[MVNum][MVNum];		//邻接矩阵    
+}AMGraph;
+
+int LocateVex(AMGraph G,char v){
+   int i;  
+   for ( i=0; i<G.vexnum; i++)
+         if (G.vexs[i]==v) return i;
+   return -1;
+}
+ 
+void CreateDG(AMGraph &G)
+{//创建有向图的邻接矩阵
+   /****************begin****************/
+   int i,j,k;
+   char v1,v2;
+	cin>>G.vexnum>>G.arcnum;
+    for(i=0;i<G.vexnum;i++){
+        cin>>G.vexs[i];
+    }
+    for(i=0;i<G.vexnum;i++){
+        for(j=0;j<G.vexnum;j++){
+            G.arcs[i][j]=0;
+        }
+    }
+    for(k=0;k<G.arcnum;k++){
+        cin>>v1>>v2;
+        i=LocateVex(G,v1);
+        j=LocateVex(G,v2);
+        G.arcs[i][j]=1;
+    }
+
+
+
+   /****************end*****************/
+ }
+void PrintGraph(AMGraph G)       //输出图的邻接矩阵	 
+{    
+	cout<<"有向图的邻接矩阵：";
+    for (int i=0;i<G.vexnum;i++)
+	{	cout<<endl;
+		for (int j=0;j<G.vexnum;j++)
+		{
+			printf("%5d",G.arcs[i][j]);
+		}
+		  
+	}
+}
+//深度优先搜索DFS 
+bool visited[MVNum];
+void DFS(AMGraph G,int v)
+{//从顶点v开始对图进行深度优先遍历 
+/****************begin****************/
+int w;
+  cout<<" "<<G.vexs[v];
+  visited[v]=true;
+    for(w=0;w<G.vexnum;w++){
+        if((G.arcs[v][w]!=0)&&(!visited[w])){
+            DFS(G,w);
+        }
+    }
+
+
+/****************begin****************/
+}
+void DFSTraverse(AMGraph G)
+{//图的深度优先遍历 
+/****************begin****************/
+int v=0;
+   for(v=0;v<G.vexnum;v++){
+       visited[v]=false;
+   }
+   for(v=0;v<G.vexnum;v++){
+       if(!visited[v]){
+            DFS(G,v);
+            cout<<"\n";
+       }
+   }
+
+
+
+/****************end ****************/
+}
+
+int main()
+{
+  	AMGraph G; 
+  	CreateDG(G);	//建立有向图的邻接矩阵 
+  	PrintGraph(G);	//输出图的邻接矩阵 
+  	cout<<"\n图的深度优先序列：\n"; 
+	DFSTraverse(G);
+ 	return 0;   
+}

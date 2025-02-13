@@ -1,0 +1,102 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//顺序表的存储结构
+#define MAXSIZE 100  
+typedef int ElemType;
+typedef struct{
+   ElemType *elem;
+   int length;
+}SqList;
+/*****顺序表的基本操作*****/
+Status InitList(SqList  &L){
+	//建立一个顺序表L 
+  	L.elem=new ElemType[MAXSIZE]; 	
+	if (!L.elem) exit(OVERFLOW);
+    int n;
+    cin>>n;             		//输入数据个数
+    if (n<=0) L.length=0;
+	else {
+		for (int i=0;i<n;i++) 	//输入n个数据
+        	cin>>L.elem[i];
+     	L.length=n;
+	}
+	return OK; 	
+}
+void OutputList(SqList L){ 
+	//输出顺序表  
+    for (int i=0;i<L.length;i++)
+        cout<<" "<<L.elem[i];   
+}
+void MergeList1(SqList La,SqList Lb,SqList &Lc){ 
+	// 初始条件：非递减顺序表La和Lb已存在
+	// 操作结果：将La和Lb的所有元素合并到新的顺序表Lc，Lc的元素也按值非递减排列（可以有重复元素） 
+	/********** Begin **********/ 
+	int pc = 0;
+    Lc.elem = new ElemType[MAXSIZE * 2]; 
+    int pa = 0, pb = 0;
+    while(pa < La.length || pb < Lb.length)
+    {
+        if(pb >= Lb.length || (pa < La.length && La.elem[pa] <= Lb.elem[pb]))
+        {
+            Lc.elem[pc++] = La.elem[pa++];
+        }
+        else Lc.elem[pc++] = Lb.elem[pb++];
+    }
+	Lc.length = pc;
+	/********** End **********/	
+}
+void MergeList2(SqList La,SqList Lb,SqList &Ld){ 
+	// 初始条件：非递减顺序表La和Lb已存在
+	// 操作结果：将La和Lb的所有元素合并到新的顺序表Lc，Lc的元素按值严格递增排列（不含重复数据）。 
+	/********** Begin **********/ 
+	int pd = 0;
+    Ld.elem = new ElemType[MAXSIZE * 2]; 
+    int pa = 0, pb = 0;
+    while(pa < La.length || pb < Lb.length)
+    {
+        int x;
+        if(pb >= Lb.length || (pa < La.length && La.elem[pa] <= Lb.elem[pb]))
+        {
+            x = La.elem[pa++];
+        }
+        else x = Lb.elem[pb++];
+
+        if(pd == 0 || Ld.elem[pd - 1] != x)
+        {
+            Ld.elem[pd++] = x;
+        }
+    }
+	Ld.length = pd;
+
+	/********** End **********/	
+}
+void DestroyList(SqList &L){
+	//顺序表的销毁 
+	delete []L.elem;
+	L.elem=NULL;
+	L.length=0;		
+}
+int main(){
+	SqList La,Lb,Lc,Ld;
+	int i;
+	ElemType e; 
+    InitList(La);		//建立有序顺序表La
+	InitList(Lb);		//建立有序顺序表La	
+	MergeList1(La,Lb,Lc);//将有序顺序表La和Lb,合并到Lc（非递减排列）	
+	OutputList(Lc);		//输出有序顺序表Lc（可以有重复元素） 
+	MergeList2(La,Lb,Ld);//将有序顺序表La和Lb,合并到Ld（严格递增排列）	
+	cout<<endl;
+	OutputList(Ld);		//输出有序顺序表Ld（无重复元素） 
+	DestroyList(La);	//销毁表La	 
+	DestroyList(Lb);	//销毁表Lb
+	DestroyList(Lc);	//销毁表Lc
+	DestroyList(Ld);	//销毁表Ld
+	return 0; 
+}

@@ -1,0 +1,74 @@
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+
+#define MaxInt 32767   			  	//最大值
+#define MVNum 20    			  	//最大顶点数
+typedef  struct { 
+   int  vexnum,arcnum;		 	 	//顶点数和边的数目 
+   char vexs[MVNum]; 			  	//顶点向量
+   int  arcs[MVNum][MVNum];			//邻接矩阵    
+}AMGraph;
+
+int LocateVex(AMGraph G,char v){
+   int i;  
+   for ( i=0; i<G.vexnum; i++)
+         if (G.vexs[i]==v) return i;
+   return -1;
+}
+ 
+void CreateUDN(AMGraph &G)  		//创建无向网的邻接矩阵 
+{/****************begin****************/
+		int m,w;
+    char v1,v2;
+    int i,j,k;
+    cin>>G.vexnum>>m;
+    for(i=0;i<G.vexnum;i++){
+        cin>>G.vexs[i];
+    }
+    for(i=0;i<G.vexnum;++i){
+
+    
+    for(j=0;j<G.vexnum;++j){
+        if(i==j) {
+        G.arcs[i][j]=0;
+        }
+        else
+        G.arcs[i][j]=MaxInt;
+    }
+    }
+    for(k=0;k<m;k++){
+        cin>>v1>>v2>>w;
+        i=LocateVex(G,v1);
+        j=LocateVex(G,v2);
+        G.arcs[i][j]=w;
+        G.arcs[j][i]=G.arcs[i][j];
+
+        }
+        
+
+    
+
+
+ /******************end****************/
+}
+void PrintGraph(AMGraph G)          //输出图的邻接矩阵	 
+{    
+	cout<<"图的邻接矩阵：";
+  	for (int i=0;i<G.vexnum;i++)
+	{	cout<<endl;
+		for (int j=0;j<G.vexnum;j++){
+			if (G.arcs[i][j]==MaxInt) 
+		  		  printf("    ∞");
+		  	else
+		  		  printf("%5d",G.arcs[i][j]);
+		}	 
+	}
+}
+int main()
+{
+  	AMGraph G; 
+  	CreateUDN(G);
+  	PrintGraph(G); 
+ 	return 0;   
+}

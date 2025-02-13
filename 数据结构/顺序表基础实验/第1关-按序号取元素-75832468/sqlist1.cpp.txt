@@ -1,0 +1,73 @@
+//常用头文件、符号常量、函数状态
+#include <cstdio>
+#include <iostream> 
+using namespace std;
+#define OK 1
+#define ERROR 0
+#define OVERFLOW -1
+typedef int Status;
+
+//顺序表的存储结构
+#define MAXSIZE 100  
+typedef int ElemType;
+typedef struct{
+   ElemType *elem;
+   int length;
+}SqList;
+/*****顺序表的基本操作*****/
+Status InitList(SqList  &L){
+	//建立一个顺序表L 
+  	L.elem=new ElemType[MAXSIZE]; 	
+	if (!L.elem) exit(OVERFLOW);
+    int n;
+    cin>>n;             		//输入数据个数
+    if (n<=0) L.length=0;
+	else {
+		for (int i=0;i<n;i++) 	//输入n个数据
+        	cin>>L.elem[i];
+     	L.length=n;
+	}
+	return OK; 	
+}
+
+Status GetElem(SqList L, int i ,ElemType  &e){
+   // 初始条件：顺序线性表L已存在，i为元素的序号
+   // 操作结果：用e返回表L中第i个元素的值，如取值成功，返回OK，否则返回ERROR.
+   /********** Begin **********/ 
+	if(i <= 0 || i > L.length) return ERROR;
+    e =  L.elem[i - 1];
+    return OK;
+	/********** End **********/
+}
+
+void DestroyList(SqList &L){
+	delete []L.elem;
+	L.elem=NULL;
+	L.length=0;		
+}
+
+int main(){
+	SqList L;
+	int i;
+	ElemType e; 
+    InitList(L);  
+	//输入要获取的表中元素的位置i，调用取值函数，输出相应的结果
+    /********** Begin **********/ 
+	int x;
+    cin >> x;
+
+    int st = GetElem(L, x, e);
+    if(st == OK)
+    {
+        cout  << "查找成功!" << endl;
+        cout << "第" << x << "个元素的值:" << e << endl;
+    }
+    else
+    {
+        cout << "查找失败!";
+    }
+
+	/********** End ***********/	    
+	DestroyList(L);//销毁数据表
+	return 0; 
+}

@@ -1,0 +1,91 @@
+#include <cstdio>  
+#include <iostream> 
+using namespace std;
+typedef int KeyType;				//关键字类型为int 
+typedef  struct{
+	KeyType key;					//关键字项 
+	//其他数据项，按需定义，此处略	
+}ElemType;							//元素类型 
+typedef struct BiTNode{
+  ElemType data;					//结点的数据域 
+  struct BiTNode *lchild,*rchild;	//左右孩子指针 
+}BiTNode,*BiTree;		 
+
+BiTree SearchBST(BiTree T,KeyType key){
+	//在二叉排序树T中，查找其关键字等于key的结点 
+	//若查找成功，返回该结点的指针，否则返回空指针 
+	//在这里补充代码，完成二叉排序树的查找 
+	/********** Begin *********/
+	if(T == NULL) return NULL;
+    if(T->data.key == key) return T;
+    if(key < T->data.key) return SearchBST(T->lchild, key);
+    else return  SearchBST(T->rchild, key);
+    
+	/********** End **********/	
+} 
+
+void InsertBST(BiTree &T,ElemType e)
+{	//当二叉排序树T中不存在关键字等于e.key的数据元素时，则将e插入到T中。
+	//在这里补充代码，完成二叉排序树的插入
+	/********** Begin *********/
+   if(T == NULL)
+   {
+       T = new BiTNode;
+       T->data = e;
+       T->lchild = NULL;
+       T->rchild = NULL;
+       return ;
+   }
+   
+    if(e.key < T->data.key) InsertBST(T->lchild, e);
+    else if(e.key > T->data.key) InsertBST(T->rchild, e);
+    /********** End **********/	
+}    
+
+void CreateBST(BiTree &T)//建立一棵二叉排序树T
+{ //将键盘输入一组整数（0表示结束）依次插入到初始为空的二叉排序树T中。 
+	ElemType e;
+    T=NULL;
+    cin>>e.key;
+    while (e.key!=0)
+	{
+        InsertBST(T,e);
+		cin>>e.key;
+    }
+}
+void Preorder(BiTree T){			//先序遍历
+	if (T==NULL) return;
+	else {
+	   cout<<" "<<T->data.key;	
+	   Preorder(T->lchild);
+	   Preorder(T->rchild);
+	}
+} 
+
+void Inorder(BiTree T){				//中序遍历
+	if (T==NULL) return;
+	else {
+	   Inorder(T->lchild);
+	   cout<<" "<<T->data.key;		   
+	   Inorder(T->rchild);
+	}
+}
+
+int main(){
+  	BiTree T;
+  	KeyType key;
+	CreateBST(T);  			//建立一棵二叉排序树
+	cin>>key;				//输入待查关键字 
+	cout<<"先序序列：";	
+	Preorder(T);					
+	cout<<"\n中序序列："; 
+	Inorder(T);
+	//调用二叉排序树的查找函数，根据函数的返回结果，输出相应信息。 
+	/********** Begin *********/
+	BiTree st = SearchBST(T, key);
+    if(st == NULL) cout << "\n查找失败";
+    else cout << "\n查找成功";
+     
+	/********** End **********/
+	return 0;
+}
